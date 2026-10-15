@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python Practice Papers</title>
+  <meta name="description" content="Week-by-week Python revision papers in the style of the IIT Madras BS Programming in Python exams.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=JetBrains+Mono:wght@500;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f8fc;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5d687c;
+      --line: #dce2ee;
+      --blue: #1a73e8;
+      --blue-dark: #1557ad;
+      --green: #1f8f5f;
+      --shadow: 0 18px 60px rgba(23, 32, 51, 0.08);
+      --radius: 8px;
+      --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+        var(--bg);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 44px 0 72px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 54px;
+      margin-bottom: 56px;
+      border-bottom: 1px solid rgba(220, 226, 238, 0.9);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 18px;
+      font-family: var(--mono);
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+    }
+
+    .meta {
+      margin: 0;
+      padding-bottom: 18px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .hero { max-width: 780px; margin-bottom: 40px; }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 0;
+      color: var(--ink);
+      font-family: Fraunces, Georgia, "Times New Roman", serif;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 850px;
+      font-size: clamp(2.3rem, 5.6vw, 4.6rem);
+      font-weight: 800;
+    }
+
+    .lead {
+      max-width: 690px;
+      margin: 18px 0 0;
+      color: #39465c;
+      font-size: clamp(1.1rem, 2vw, 1.32rem);
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 26px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .facts li {
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .phase { margin-top: 56px; }
+
+    .phase-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .phase-head h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
+
+    .phase-head .range {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .weeks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .week-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      gap: 18px;
+      min-height: 280px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    a.week-card:hover,
+    a.week-card:focus-visible {
+      border-color: rgba(26, 115, 232, 0.45);
+      box-shadow: 0 22px 70px rgba(23, 32, 51, 0.12);
+      transform: translateY(-3px);
+      outline: none;
+    }
+
+    .week-card.soon {
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: none;
+      border-style: dashed;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .card-top .eyebrow { margin-bottom: 8px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(31, 143, 95, 0.1);
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .soon .tag { background: #eef0f5; color: var(--muted); }
+    .soon .eyebrow { color: var(--muted); }
+
+    .card-title { font-size: 1.6rem; }
+
+    .week-card p { margin: 0; color: var(--muted); }
+
+    .details {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: white;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    a.week-card:hover .action { background: var(--blue-dark); }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 640px) {
+      .shell { padding-top: 28px; }
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 40px;
+      }
+      .brand, .meta { padding-bottom: 14px; }
+      .week-card { min-height: auto; padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./"><span class="mark">Py</span> Python Practice</a>
+      <p class="meta">IIT Madras BS · Programming in Python</p>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Revision papers</p>
+      <h1 id="page-title">Python practice, one week at a time</h1>
+      <p class="lead">Each week has four original revision papers. They are modelled on how past exams test that week's syllabus. Answer in the browser, submit to see your score, and open the solution under each question.</p>
+      <ul class="facts">
+        <li>4 papers per week</li>
+        <li>21 questions · 50 marks</li>
+        <li>MCQ · MSQ · NAT</li>
+        <li>Every answer checked by running Python</li>
+      </ul>
+    </section>
+
+    <section class="phase" aria-labelledby="phase-1">
+      <div class="phase-head">
+        <h2 id="phase-1">Basics and logic</h2>
+        <span class="range">Phase 1 · Weeks 1–4</span>
+      </div>
+      <div class="weeks">
+        <a class="week-card" href="week-1/#paper-1">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 1</p><h2 class="card-title">Introduction, variables, and basic operations</h2></div>
+            <span class="tag">Available</span>
+          </div>
+          <p>Running code, variables, input, data types, literals, expressions, and strings.</p>
+          <ul class="details"><li>4 papers · 84 questions</li></ul>
+          <span class="action">Open Week 1</span>
+        </a>
+        <a class="week-card" href="week-2/#paper-1">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 2</p><h2 class="card-title">Conditions and strings</h2></div>
+            <span class="tag">Available</span>
+          </div>
+          <p>Dynamic typing, quotes, string methods, if-elif-else, and importing libraries.</p>
+          <ul class="details"><li>4 papers · 84 questions</li></ul>
+          <span class="action">Open Week 2</span>
+        </a>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 3</p><h2 class="card-title">Loops and formatted output</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>While loops, for loops, range(), nested loops, break, continue, and pass.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 4</p><h2 class="card-title">Lists, search, and arrays</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Lists, simple simulations, search, sorting, matrices, and dot products.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="phase" aria-labelledby="phase-2">
+      <div class="phase-head">
+        <h2 id="phase-2">Functions and collections</h2>
+        <span class="range">Phase 2 · Weeks 5–8</span>
+      </div>
+      <div class="weeks">
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 5</p><h2 class="card-title">Functions, scope, and recursion</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Writing functions, variable scope, parameters, return values, and recursion.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 6</p><h2 class="card-title">Dictionaries, sets, and tuples</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Dictionaries, sets, tuples, nested data, and lookups.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 7</p><h2 class="card-title">Revision and catch-up</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Review of earlier topics, debugging practice, and pending coding tasks.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 8</p><h2 class="card-title">Recursion and binary search</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Recursive list problems, recursive sorting, binary search, and lookup cost.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="phase" aria-labelledby="phase-3">
+      <div class="phase-head">
+        <h2 id="phase-3">Files, OOP, and data</h2>
+        <span class="range">Phase 3 · Weeks 9–12</span>
+      </div>
+      <div class="weeks">
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 9</p><h2 class="card-title">Files and data tables</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Reading and writing files, larger datasets, ciphers, sequence tracking, and Pandas DataFrames.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 10</p><h2 class="card-title">Object-oriented programming and plots</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Classes, objects, attributes, inheritance, method overriding, NumPy, and Matplotlib.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 11</p><h2 class="card-title">Errors and functional tools</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Try-except blocks and tools such as map, filter, and zip.</p>
+        </div>
+        <div class="week-card soon">
+          <div class="card-top">
+            <div><p class="eyebrow">Week 12</p><h2 class="card-title">Final revision</h2></div>
+            <span class="tag">Coming soon</span>
+          </div>
+          <p>Revision and exam preparation across the full course.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Original revision papers written from the course syllabus and the style of past exam papers. They are not official exam material.</p>
+    </footer>
+  </main>
+  <script>
+    // Opened from disk (file://), folder links show a directory listing instead of index.html.
+    if (location.protocol === 'file:') {
+      for (const a of document.querySelectorAll('a[href]')) {
+        const href = a.getAttribute('href');
+        if (/^[^:]*\/(#.*)?$/.test(href)) a.setAttribute('href', href.replace(/\/(#.*)?$/, '/index.html$1'));
+      }
+    }
+  </script>
+</body>
+</html>

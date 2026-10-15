@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Week 2 Revision Paper 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --ink: #16181d; --muted: #5c6370; --canvas: #f8f8fc; --alt: #f0f1f7; --paper: #fff;
+  --rule: #e0e2ea; --blue: #1a73e8; --blue-soft: #e8f0fe; --green: #188038; --green-soft: #e6f4ea;
+  --amber: #b06000; --amber-soft: #fef7e0; --red: #c5221f; --red-soft: #fce8e6;
+  --serif: Fraunces, Georgia, "Times New Roman", serif;
+  --sans: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; overflow-x: hidden; background: var(--canvas); color: var(--ink); font: 16px/1.7 var(--sans); }
+button, input { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid rgba(26, 115, 232, .35); outline-offset: 2px; }
+
+.hero { border-bottom: 1px solid var(--rule); padding: 72px 20px 48px; }
+.hero-inner, .layout { max-width: 1000px; margin: 0 auto; }
+.eyebrow { font: 600 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--blue); }
+.hero h1 { font: 600 clamp(36px, 6vw, 64px)/1.05 var(--serif); letter-spacing: -.02em; margin: 14px 0 16px; text-wrap: balance; }
+.hero p { max-width: 640px; margin: 0; color: var(--muted); font-size: 17px; }
+.paper-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.paper-meta span { border: 1px solid var(--rule); background: var(--paper); padding: 5px 11px; border-radius: 999px; font: 500 12px/1.4 var(--mono); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 740px) minmax(0, 220px); gap: 40px; padding: 48px 20px 40px; }
+.layout > * { min-width: 0; }
+.instructions { background: var(--alt); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 20px 24px; margin-bottom: 32px; }
+.instructions h2, .wrapup h2 { font: 600 26px/1.2 var(--serif); margin: 0 0 8px; }
+.instructions ul { margin: 0; padding-left: 20px; }
+
+.question-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 26px 28px; margin: 0 0 28px; scroll-margin-top: 16px; }
+.question-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-bottom: 1px solid var(--rule); padding-bottom: 14px; margin-bottom: 18px; }
+.question-title { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.question-number { font: 600 20px/1.3 var(--serif); }
+.badge, .result-tag { border-radius: 999px; padding: 3px 9px; font: 600 11px/1.4 var(--mono); letter-spacing: .04em; }
+.badge { background: var(--blue-soft); color: #174ea6; }
+.result-tag.correct { background: var(--green-soft); color: var(--green); }
+.result-tag.incorrect { background: var(--red-soft); color: var(--red); }
+.result-tag.skipped { background: var(--alt); color: var(--muted); }
+.marks { color: var(--muted); font: 500 12px/1.5 var(--mono); text-align: right; white-space: nowrap; }
+.question-content > :first-child { margin-top: 0; }
+.question-content p { margin: 0 0 12px; }
+.type-hint { margin: 18px 0 8px; color: var(--muted); font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+:not(pre) > code { background: var(--alt); border-radius: 5px; padding: .12em .38em; font: 88%/1.5 var(--mono); overflow-wrap: anywhere; }
+
+.code-wrap { background: #f4f5fa; border: 1px solid var(--rule); border-radius: 10px; margin: 16px 0; overflow: hidden; max-width: 100%; }
+.code-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 8px 6px 14px; border-bottom: 1px solid var(--rule); background: #eceef5; }
+.code-label { color: var(--muted); font: 600 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.copy-code { border: 1px solid #c9cdd8; background: var(--paper); color: var(--ink); border-radius: 6px; padding: 3px 10px; font: 600 11px/1.5 var(--mono); }
+.copy-code:hover { border-color: var(--blue); color: var(--blue); }
+.copy-code.copied { border-color: var(--green); color: var(--green); }
+.code-caption { margin: 18px 0 -8px; font-weight: 600; font-size: 14px; }
+.code-wrap pre { margin: 0; padding: 14px 16px; overflow-x: auto; tab-size: 4; }
+.code-wrap code { white-space: pre; font: 13.5px/1.7 var(--mono); color: var(--ink); }
+.code-wrap.numbered code { counter-reset: line; }
+.code-wrap.numbered .line::before { counter-increment: line; content: counter(line); display: inline-block; width: 1.6em; margin-right: 1.2em; text-align: right; color: #9aa0ad; user-select: none; }
+.code-wrap.is-output { background: var(--paper); border-left: 3px solid var(--ink); }
+.code-wrap.is-output .code-bar { background: var(--paper); }
+.tok-keyword { color: #8430ce; font-weight: 600; }
+.tok-string { color: #0b7a3b; }
+.tok-number, .tok-const { color: #b45309; }
+.tok-comment { color: #7a8190; font-style: italic; }
+.tok-builtin, .tok-func { color: #1967d2; }
+
+.options { display: grid; gap: 10px; margin: 0 0 18px; }
+.option { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; background: var(--paper); cursor: pointer; transition: border-color .15s, background .15s; min-width: 0; }
+.option:hover { border-color: #a8c7fa; }
+.option:has(input:checked) { border-color: var(--blue); background: #f5f9ff; box-shadow: 0 0 0 1px var(--blue); }
+.option input { margin: 6px 0 0; width: 16px; height: 16px; flex: 0 0 16px; accent-color: var(--blue); }
+.option-letter { flex: 0 0 auto; margin-top: 3px; color: var(--muted); font: 600 13px/1.7 var(--mono); }
+.option-letter::after { content: "."; }
+.option-body { min-width: 0; flex: 1; }
+.option-body .code-wrap { margin: 0; }
+.option-text + .code-wrap { margin-top: 10px; }
+.option.is-correct { border-color: var(--green); background: var(--green-soft); box-shadow: none; }
+.option.is-wrong { border-color: var(--red); background: var(--red-soft); box-shadow: none; }
+
+.nat-label { display: block; margin: 0 0 18px; font-weight: 600; font-size: 14px; }
+.nat-input { display: block; width: min(280px, 100%); margin-top: 6px; border: 1px solid #c9cdd8; border-radius: 8px; padding: 10px 12px; background: var(--paper); font: 15px/1.4 var(--mono); }
+.nat-input:focus { border-color: var(--blue); }
+.nat-input.is-correct { border-color: var(--green); background: var(--green-soft); }
+.nat-input.is-wrong { border-color: var(--red); background: var(--red-soft); }
+
+.question-actions, .wrapup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.question-actions button, .btn { border: 1px solid #c9cdd8; background: var(--paper); color: var(--ink); border-radius: 8px; padding: 7px 13px; font-size: 13px; font-weight: 600; }
+.question-actions button:hover, .btn:hover { border-color: var(--blue); color: var(--blue); }
+.review-btn.active { background: var(--amber-soft); color: var(--amber); border-color: #e9c46a; }
+.btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn-primary:hover { background: #1765cc; color: #fff; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+.solution { border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 14px; }
+.solution summary { color: var(--blue); font-weight: 600; font-size: 14px; cursor: pointer; }
+.solution-inner { margin-top: 12px; background: var(--canvas); border-radius: 10px; padding: 16px 18px; }
+.solution-inner p { margin: 0 0 10px; }
+.solution-inner > :last-child, .solution-text > :last-child { margin-bottom: 0; }
+.answer-line { color: var(--green); }
+
+.diagram { margin: 16px 0; text-align: center; }
+.diagram img { display: block; max-width: 100%; height: auto; margin: auto; border: 1px solid var(--rule); border-radius: 10px; background: #fff; }
+.table-scroll { overflow-x: auto; }
+.data-table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+.data-table th, .data-table td { border: 1px solid var(--rule); padding: 8px 10px; text-align: left; }
+.data-table th { background: var(--alt); }
+
+.sidebar { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 18px; }
+.sidebar h2 { font: 600 18px/1.2 var(--serif); margin: 0 0 12px; }
+.palette { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.palette button { position: relative; min-width: 0; aspect-ratio: 1; border: 1px solid #c9cdd8; background: var(--paper); border-radius: 7px; color: var(--muted); font: 600 12px/1 var(--mono); padding: 0; }
+.palette button.visited { border-color: var(--blue); background: var(--blue-soft); color: #174ea6; }
+.palette button.answered { background: var(--green); border-color: var(--green); color: #fff; }
+.palette button.review { background: var(--amber-soft); border-color: #e9a100; color: var(--amber); }
+.palette button.review.answered::after { content: ""; position: absolute; right: 3px; top: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.palette button.correct { background: var(--green); border-color: var(--green); color: #fff; }
+.palette button.incorrect { background: var(--red); border-color: var(--red); color: #fff; }
+.palette button.skipped { background: var(--alt); border-color: #c9cdd8; color: var(--muted); }
+.legend { display: grid; gap: 5px; margin: 14px 0; font-size: 12px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; background: var(--paper); border: 1px solid #c9cdd8; }
+.legend .l-visited::before { background: var(--blue-soft); border-color: var(--blue); }
+.legend .l-answered::before { background: var(--green); border-color: var(--green); }
+.legend .l-review::before { background: var(--amber-soft); border-color: #e9a100; }
+.mini-summary { border-top: 1px solid var(--rule); padding-top: 12px; display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; font-size: 13px; }
+.mini-summary b { font-family: var(--mono); }
+.sidebar .btn { display: block; width: 100%; margin-top: 14px; text-align: center; text-decoration: none; }
+
+.wrapup { background: var(--alt); border-top: 1px solid var(--rule); padding: 56px 20px 64px; }
+.wrapup-inner { max-width: 1000px; margin: 0 auto; }
+.wrapup-inner > * { max-width: 740px; }
+.wrapup p { margin: 0 0 18px; color: var(--muted); }
+.checklist { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 8px; }
+.checklist button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+.checklist .tick { flex: 0 0 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid #c9cdd8; color: transparent; font: 700 12px/1 var(--mono); }
+.checklist .done .tick { background: var(--green); border-color: var(--green); color: #fff; }
+.checklist .detail { margin-left: auto; color: var(--muted); font: 500 12px/1.4 var(--mono); white-space: nowrap; }
+.summary-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 24px; }
+.summary-cards div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; }
+.summary-cards b { display: block; font: 600 30px/1.1 var(--serif); }
+.summary-cards span { color: var(--muted); font: 500 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.score { margin-top: 24px; background: var(--paper); border: 1px solid var(--rule); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 18px 22px; }
+.score strong { display: block; font: 600 30px/1.2 var(--serif); color: var(--ink); }
+.score p { margin: 6px 0 0; }
+.paper-footer { padding: 24px 20px 40px; color: var(--muted); text-align: center; font-size: 12px; background: var(--alt); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 28px; }
+  .sidebar { position: static; grid-row: 1; max-height: none; }
+  .palette { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
+}
+@media (max-width: 560px) {
+  body { font-size: 15px; }
+  .hero { padding: 44px 16px 32px; }
+  .layout { padding: 20px 12px 32px; }
+  .question-card { padding: 18px 16px; border-radius: 12px; }
+  .question-head { display: block; }
+  .marks { display: block; text-align: left; margin-top: 6px; }
+  .code-wrap pre { padding: 12px; }
+  .code-wrap code { font-size: 12.5px; }
+  .summary-cards b { font-size: 24px; }
+  .summary-cards div { padding: 12px; }
+  .checklist .detail { display: none; }
+  .wrapup { padding: 40px 16px 48px; }
+}
+@media print {
+  body { background: #fff; }
+  .hero { padding: 0 0 16px; }
+  .layout { display: block; max-width: none; padding: 16px 0; }
+  .sidebar, .question-actions, .copy-code, .wrapup, .paper-footer, .solution, .type-hint { display: none; }
+  .question-card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><div class="eyebrow">Python · Week 2 · Conditions and strings</div><h1>Week 2 Revision Paper 2</h1><p>Grading and validation logic with if-elif, string tests on user input, escape sequences and raw strings, f-string padding, and variables rebound across types.</p><div class="paper-meta"><span>21 questions</span><span>50 marks</span><span>90 minutes</span><span>12 MCQ · 4 MSQ · 5 NAT</span><span>No negative marking</span></div></div></header>
+<div class="layout">
+<main>
+<section class="instructions"><h2>Instructions</h2><ul><li>MCQ has exactly one correct option; MSQ has one or more correct options.</li><li>Enter only the requested number for NAT questions. Unless stated otherwise, assume standard Python 3 behaviour.</li><li>Solutions are collapsed. Attempt each question before opening its solution, then submit at the end to see your score.</li></ul></section>
+<article class="question-card" id="question-1" data-question="1" data-type="mcq" data-marks="3" data-answer="A">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 1</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Consider the below code snippet. The user enters <code>250</code>. What will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">units = <span class="tok-builtin">int</span>(<span class="tok-builtin">input</span>())</span>
+<span class="line"><span class="tok-keyword">if</span> units &lt;= <span class="tok-number">100</span>:</span>
+<span class="line">    rate = <span class="tok-number">3</span></span>
+<span class="line"><span class="tok-keyword">elif</span> units &lt;= <span class="tok-number">200</span>:</span>
+<span class="line">    rate = <span class="tok-number">5</span></span>
+<span class="line"><span class="tok-keyword">elif</span> units &lt;= <span class="tok-number">300</span>:</span>
+<span class="line">    rate = <span class="tok-number">7</span></span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    rate = <span class="tok-number">9</span></span>
+<span class="line"><span class="tok-keyword">if</span> units &gt; <span class="tok-number">150</span> <span class="tok-keyword">and</span> rate &lt; <span class="tok-number">7</span>:</span>
+<span class="line">    rate = rate + <span class="tok-number">1</span></span>
+<span class="line"><span class="tok-builtin">print</span>(units * rate)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 1"><label class="option"><input type="radio" name="q1" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>1750</code></span></span></label><label class="option"><input type="radio" name="q1" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>2250</code></span></span></label><label class="option"><input type="radio" name="q1" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>2000</code></span></span></label><label class="option"><input type="radio" name="q1" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>1250</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A — <code>1750</code></p><div class="solution-text"><p>250 is not at most 100 or 200 but is at most 300, so <code>rate</code> is 7. The second <code>if</code> needs both <code>units &gt; 150</code> and <code>rate &lt; 7</code>; the second part is <code>False</code>, so the rate stays 7. 250 × 7 = 1750.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">1750</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-2" data-question="2" data-type="mcq" data-marks="3" data-answer="A">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 2</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">s = <span class="tok-string">&quot;hello world&quot;</span></span>
+<span class="line"><span class="tok-builtin">print</span>(s.<span class="tok-func">title</span>().<span class="tok-func">swapcase</span>().<span class="tok-func">split</span>(<span class="tok-string">&quot;O&quot;</span>))</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 2"><label class="option"><input type="radio" name="q2" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>['hELL', ' w', 'RLD']</code></span></span></label><label class="option"><input type="radio" name="q2" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>['hELLO', 'wORLD']</code></span></span></label><label class="option"><input type="radio" name="q2" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>['Hell', ' W', 'rld']</code></span></span></label><label class="option"><input type="radio" name="q2" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>['hELL', 'w', 'RLD']</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A — <code>['hELL', ' w', 'RLD']</code></p><div class="solution-text"><p><code>title()</code> gives <code>"Hello World"</code> and <code>swapcase()</code> flips every letter, giving <code>"hELLO wORLD"</code>. <code>split("O")</code> cuts at each capital <code>O</code> and removes it; the space before <code>w</code> stays in the middle piece.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">[&#39;hELL&#39;, &#39; w&#39;, &#39;RLD&#39;]</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-3" data-question="3" data-type="mcq" data-marks="3" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 3</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">s = <span class="tok-string">&quot;&quot;</span>&quot;one</span>
+<span class="line">two\</span>
+<span class="line">three<span class="tok-string">&quot;&quot;</span>&quot;</span>
+<span class="line"><span class="tok-builtin">print</span>(s)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 3"><label class="option"><input type="radio" name="q3" value="A"><span class="option-letter">A</span><span class="option-body"><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Option A</span><button class="copy-code" type="button" aria-label="Copy Option A to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">one</span>
+<span class="line">two\three</span></code></pre></div></span></label><label class="option"><input type="radio" name="q3" value="B"><span class="option-letter">B</span><span class="option-body"><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Option B</span><button class="copy-code" type="button" aria-label="Copy Option B to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">one</span>
+<span class="line">twothree</span></code></pre></div></span></label><label class="option"><input type="radio" name="q3" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>onetwothree</code></span></span></label><label class="option"><input type="radio" name="q3" value="D"><span class="option-letter">D</span><span class="option-body"><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Option D</span><button class="copy-code" type="button" aria-label="Copy Option D to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">one</span>
+<span class="line">two</span>
+<span class="line">three</span></code></pre></div></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B</p><div class="solution-text"><p>A triple-quoted string keeps real line breaks, so <code>one</code> and <code>two</code> are on separate lines. A backslash at the very end of a line inside the string joins that line to the next, so no newline appears between <code>two</code> and <code>three</code>.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">one</span>
+<span class="line">twothree</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-4" data-question="4" data-type="mcq" data-marks="3" data-answer="A">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 4</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">a = <span class="tok-number">5</span></span>
+<span class="line">b = a</span>
+<span class="line">a = a + <span class="tok-number">0.5</span></span>
+<span class="line">c = b</span>
+<span class="line">b = <span class="tok-builtin">str</span>(b) + <span class="tok-string">&quot;!&quot;</span></span>
+<span class="line"><span class="tok-builtin">print</span>(a, b, c)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 4"><label class="option"><input type="radio" name="q4" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>5.5 5! 5</code></span></span></label><label class="option"><input type="radio" name="q4" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>5 5! 5</code></span></span></label><label class="option"><input type="radio" name="q4" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>5.5 5! 5!</code></span></span></label><label class="option"><input type="radio" name="q4" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>5.5 5.5! 5.5</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A — <code>5.5 5! 5</code></p><div class="solution-text"><p><code>b = a</code> makes <code>b</code> refer to the int 5. Rebinding <code>a</code> to 5.5 does not change <code>b</code>. <code>c = b</code> copies the int 5 before <code>b</code> is rebound to the string <code>"5!"</code>, so <code>c</code> still refers to 5.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">5.5 5! 5</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-5" data-question="5" data-type="mcq" data-marks="3" data-answer="A">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 5</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">x = <span class="tok-string">&quot;&quot;</span></span>
+<span class="line">y = <span class="tok-string">&quot; &quot;</span></span>
+<span class="line">z = <span class="tok-string">&quot;0&quot;</span></span>
+<span class="line"><span class="tok-keyword">if</span> x:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;x&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">elif</span> y.<span class="tok-func">strip</span>():</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;y&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">elif</span> <span class="tok-builtin">int</span>(z):</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;z&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;none&quot;</span>)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 5"><label class="option"><input type="radio" name="q5" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>none</code></span></span></label><label class="option"><input type="radio" name="q5" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>y</code></span></span></label><label class="option"><input type="radio" name="q5" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>x</code></span></span></label><label class="option"><input type="radio" name="q5" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>z</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A — <code>none</code></p><div class="solution-text"><p>The empty string is falsy. <code>" ".strip()</code> is also empty, so that test fails. <code>int("0")</code> is 0, which is falsy. No branch succeeds, so the <code>else</code> runs.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">none</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-6" data-question="6" data-type="mcq" data-marks="3" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 6</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">name = <span class="tok-string">&quot;Asha&quot;</span></span>
+<span class="line">roll = <span class="tok-number">7</span></span>
+<span class="line"><span class="tok-builtin">print</span>(<span class="tok-string">f&quot;{name.upper()}-{roll:03}-{len(name) * 2}&quot;</span>)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 6"><label class="option"><input type="radio" name="q6" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>ASHA-007-{len(name) * 2}</code></span></span></label><label class="option"><input type="radio" name="q6" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>ASHA-007-8</code></span></span></label><label class="option"><input type="radio" name="q6" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>ASHA-7-8</code></span></span></label><label class="option"><input type="radio" name="q6" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>Asha-007-8</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — <code>ASHA-007-8</code></p><div class="solution-text"><p>Any expression can go inside the braces, including method calls and arithmetic. <code>{roll:03}</code> pads 7 with zeros to width 3.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">ASHA-007-8</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-7" data-question="7" data-type="mcq" data-marks="3" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 7</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>A year is a leap year if it is divisible by 400, or divisible by 4 but not by 100. Each snippet reads a year and should print <code>Leap</code> or <code>Not leap</code>. Choose the correct option.</p><p class="code-caption">Snippet-1</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Snippet-1</span><button class="copy-code" type="button" aria-label="Copy Snippet-1 to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">y = <span class="tok-builtin">int</span>(<span class="tok-builtin">input</span>())</span>
+<span class="line"><span class="tok-keyword">if</span> y % <span class="tok-number">400</span> == <span class="tok-number">0</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;Leap&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">elif</span> y % <span class="tok-number">100</span> == <span class="tok-number">0</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;Not leap&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">elif</span> y % <span class="tok-number">4</span> == <span class="tok-number">0</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;Leap&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;Not leap&quot;</span>)</span></code></pre></div><p class="code-caption">Snippet-2</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Snippet-2</span><button class="copy-code" type="button" aria-label="Copy Snippet-2 to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">y = <span class="tok-builtin">int</span>(<span class="tok-builtin">input</span>())</span>
+<span class="line"><span class="tok-keyword">if</span> y % <span class="tok-number">4</span> == <span class="tok-number">0</span> <span class="tok-keyword">and</span> y % <span class="tok-number">100</span> != <span class="tok-number">0</span> <span class="tok-keyword">or</span> y % <span class="tok-number">400</span> == <span class="tok-number">0</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;Leap&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;Not leap&quot;</span>)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 7"><label class="option"><input type="radio" name="q7" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text">Only Snippet-1 is correct</span></span></label><label class="option"><input type="radio" name="q7" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text">Both snippets are correct</span></span></label><label class="option"><input type="radio" name="q7" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text">Only Snippet-2 is correct</span></span></label><label class="option"><input type="radio" name="q7" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text">Both snippets are incorrect</span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — Both snippets are correct</p><div class="solution-text"><p>Snippet-1 tests the most specific rule first: 400 means leap, otherwise 100 means not leap, otherwise 4 means leap. Snippet-2 combines the rules in one condition. <code>and</code> binds tighter than <code>or</code>, so it reads <code>(divisible by 4 and not by 100) or divisible by 400</code>, which is exactly the definition.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-8" data-question="8" data-type="mcq" data-marks="3" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 8</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Consider the below code snippet. Which input makes it print <code>VALID</code>?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">code = <span class="tok-builtin">input</span>()</span>
+<span class="line"><span class="tok-keyword">if</span> <span class="tok-builtin">len</span>(code) == <span class="tok-number">6</span> <span class="tok-keyword">and</span> code[:<span class="tok-number">2</span>].<span class="tok-func">isalpha</span>() <span class="tok-keyword">and</span> code[<span class="tok-number">2</span>:].<span class="tok-func">isdigit</span>():</span>
+<span class="line">    <span class="tok-keyword">if</span> code[:<span class="tok-number">2</span>].<span class="tok-func">isupper</span>():</span>
+<span class="line">        <span class="tok-builtin">print</span>(<span class="tok-string">&quot;VALID&quot;</span>)</span>
+<span class="line">    <span class="tok-keyword">else</span>:</span>
+<span class="line">        <span class="tok-builtin">print</span>(<span class="tok-string">&quot;CASE&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;INVALID&quot;</span>)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 8"><label class="option"><input type="radio" name="q8" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>A1B234</code></span></span></label><label class="option"><input type="radio" name="q8" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>AB1234</code></span></span></label><label class="option"><input type="radio" name="q8" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>ab1234</code></span></span></label><label class="option"><input type="radio" name="q8" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>AB12C4</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — <code>AB1234</code></p><div class="solution-text"><p>The input must have 6 characters, two letters followed by four digits. <code>ab1234</code> has the right shape but lowercase letters, so it prints <code>CASE</code>. <code>AB12C4</code> and <code>A1B234</code> fail the shape test.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-9" data-question="9" data-type="msq" data-marks="3" data-answer="AC">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 9</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Consider the below code. Assuming <code>a</code>, <code>b</code> and <code>c</code> can each be <code>True</code> or <code>False</code>, select all possible outputs.</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">if</span> a:</span>
+<span class="line">    <span class="tok-keyword">if</span> b:</span>
+<span class="line">        <span class="tok-builtin">print</span>(<span class="tok-string">&quot;p&quot;</span>)</span>
+<span class="line">    <span class="tok-keyword">else</span>:</span>
+<span class="line">        <span class="tok-builtin">print</span>(<span class="tok-string">&quot;q&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">elif</span> c:</span>
+<span class="line">    <span class="tok-builtin">print</span>(<span class="tok-string">&quot;r&quot;</span>)</span>
+<span class="line"><span class="tok-builtin">print</span>(<span class="tok-string">&quot;s&quot;</span>)</span></code></pre></div></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 9"><label class="option"><input type="checkbox" name="q9" value="A"><span class="option-letter">A</span><span class="option-body"><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Option A</span><button class="copy-code" type="button" aria-label="Copy Option A to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">p</span>
+<span class="line">s</span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q9" value="B"><span class="option-letter">B</span><span class="option-body"><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Option B</span><button class="copy-code" type="button" aria-label="Copy Option B to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">q</span>
+<span class="line">r</span>
+<span class="line">s</span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q9" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>s</code></span></span></label><label class="option"><input type="checkbox" name="q9" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>r</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A and C</p><div class="solution-text"><p>The <code>if</code>/<code>elif</code> prints at most one of <code>p</code>, <code>q</code> and <code>r</code>, so <code>q</code> and <code>r</code> never appear together. The final <code>print("s")</code> is not indented, so <code>s</code> is always printed last. When <code>a</code> and <code>c</code> are both false, only <code>s</code> appears.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-10" data-question="10" data-type="msq" data-marks="3" data-answer="ABC">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 10</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Let <code>s = "Mississippi"</code>. Select all expressions that evaluate to <code>True</code>.</p></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 10"><label class="option"><input type="checkbox" name="q10" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>s.lower().count('ss') == 2</code></span></span></label><label class="option"><input type="checkbox" name="q10" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>s.index('i') == 1</code></span></span></label><label class="option"><input type="checkbox" name="q10" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>s.replace('ss', 's') == 'Misisippi'</code></span></span></label><label class="option"><input type="checkbox" name="q10" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>s.upper().isupper() and s.isupper()</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A, B and C</p><div class="solution-text"><p><code>count</code> counts non-overlapping matches. <code>index</code> returns the position of the first match. <code>replace</code> changes every occurrence. <code>s.isupper()</code> is <code>False</code> because <code>s</code> contains lowercase letters.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-11" data-question="11" data-type="msq" data-marks="3" data-answer="ABD">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 11</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Select all statements that print exactly <code>C:\new\table</code>.</p></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 11"><label class="option"><input type="checkbox" name="q11" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>print("C:\\new\\table")</code></span></span></label><label class="option"><input type="checkbox" name="q11" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>print(r"C:\new\table")</code></span></span></label><label class="option"><input type="checkbox" name="q11" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>print("C:\new\table")</code></span></span></label><label class="option"><input type="checkbox" name="q11" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>print('C:\\new' + "\\table")</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A, B and D</p><div class="solution-text"><p>In a normal string, <code>\n</code> and <code>\t</code> become a newline and a tab, so a literal backslash must be written <code>\\</code>. A raw string (prefix <code>r</code>) keeps every backslash as typed.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-12" data-question="12" data-type="nat" data-marks="3" data-answer="15">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 12</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>The user enters <code>7</code>. What number is printed by the following code?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">x = <span class="tok-builtin">int</span>(<span class="tok-builtin">input</span>())</span>
+<span class="line">y = <span class="tok-number">0</span></span>
+<span class="line"><span class="tok-keyword">if</span> x &gt; <span class="tok-number">5</span>:</span>
+<span class="line">    y = y + x</span>
+<span class="line"><span class="tok-keyword">if</span> x &gt; <span class="tok-number">6</span>:</span>
+<span class="line">    y = y * <span class="tok-number">2</span></span>
+<span class="line"><span class="tok-keyword">elif</span> x &gt; <span class="tok-number">3</span>:</span>
+<span class="line">    y = y + <span class="tok-number">100</span></span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    y = -<span class="tok-number">1</span></span>
+<span class="line"><span class="tok-keyword">if</span> <span class="tok-keyword">not</span> y % <span class="tok-number">4</span>:</span>
+<span class="line">    y = y // <span class="tok-number">4</span></span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    y = y + <span class="tok-number">1</span></span>
+<span class="line"><span class="tok-builtin">print</span>(y)</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 12"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 15</p><div class="solution-text"><p>7 &gt; 5, so <code>y</code> becomes 7. Then 7 &gt; 6, so <code>y</code> doubles to 14 and the <code>elif</code> and <code>else</code> are skipped. <code>14 % 4</code> is 2, so <code>not y % 4</code> is <code>False</code> and the <code>else</code> adds 1.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">15</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-13" data-question="13" data-type="nat" data-marks="3" data-answer="14">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 13</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>What number is printed by the following code?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">s = <span class="tok-string">&quot;  Python Programming  &quot;</span></span>
+<span class="line"><span class="tok-builtin">print</span>(<span class="tok-builtin">len</span>(s.<span class="tok-func">strip</span>()) - <span class="tok-builtin">len</span>(s.<span class="tok-func">split</span>()[<span class="tok-number">0</span>]) + s.<span class="tok-func">lower</span>().<span class="tok-func">count</span>(<span class="tok-string">&quot;p&quot;</span>))</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 13"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 14</p><div class="solution-text"><p><code>s.strip()</code> is <code>"Python Programming"</code>, 18 characters. <code>s.split()[0]</code> is <code>"Python"</code>, 6 characters. The lowercase string contains <code>p</code> twice. 18 - 6 + 2 = 14.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">14</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-14" data-question="14" data-type="mcq" data-marks="1.5" data-answer="D">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 14</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>Questions 14 and 15 are based on the following code. What is printed when the input is <code> Ravi@Mail.COM </code> (with spaces at both ends)?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">email = <span class="tok-builtin">input</span>().<span class="tok-func">strip</span>().<span class="tok-func">lower</span>()</span>
+<span class="line">at = email.<span class="tok-func">find</span>(<span class="tok-string">&quot;@&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">if</span> at &lt;= <span class="tok-number">0</span>:</span>
+<span class="line">    status = <span class="tok-string">&quot;missing user&quot;</span></span>
+<span class="line"><span class="tok-keyword">elif</span> email.<span class="tok-func">count</span>(<span class="tok-string">&quot;@&quot;</span>) &gt; <span class="tok-number">1</span>:</span>
+<span class="line">    status = <span class="tok-string">&quot;too many @&quot;</span></span>
+<span class="line"><span class="tok-keyword">elif</span> <span class="tok-keyword">not</span> email.<span class="tok-func">endswith</span>(<span class="tok-string">&quot;.com&quot;</span>):</span>
+<span class="line">    status = <span class="tok-string">&quot;bad domain&quot;</span></span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    status = <span class="tok-string">&quot;ok&quot;</span></span>
+<span class="line"><span class="tok-builtin">print</span>(status, at)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 14"><label class="option"><input type="radio" name="q14" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>ok 5</code></span></span></label><label class="option"><input type="radio" name="q14" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>missing user -1</code></span></span></label><label class="option"><input type="radio" name="q14" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>bad domain 4</code></span></span></label><label class="option"><input type="radio" name="q14" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>ok 4</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> D — <code>ok 4</code></p><div class="solution-text"><p>The input is stripped and lowercased to <code>"ravi@mail.com"</code> before any test, so it ends with <code>.com</code>. The <code>@</code> is at index 4.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">ok 4</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-15" data-question="15" data-type="nat" data-marks="1.5" data-answer="3">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 15</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>For the same code, what number is printed for the input <code>x.y@site.org</code>?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">email = <span class="tok-builtin">input</span>().<span class="tok-func">strip</span>().<span class="tok-func">lower</span>()</span>
+<span class="line">at = email.<span class="tok-func">find</span>(<span class="tok-string">&quot;@&quot;</span>)</span>
+<span class="line"><span class="tok-keyword">if</span> at &lt;= <span class="tok-number">0</span>:</span>
+<span class="line">    status = <span class="tok-string">&quot;missing user&quot;</span></span>
+<span class="line"><span class="tok-keyword">elif</span> email.<span class="tok-func">count</span>(<span class="tok-string">&quot;@&quot;</span>) &gt; <span class="tok-number">1</span>:</span>
+<span class="line">    status = <span class="tok-string">&quot;too many @&quot;</span></span>
+<span class="line"><span class="tok-keyword">elif</span> <span class="tok-keyword">not</span> email.<span class="tok-func">endswith</span>(<span class="tok-string">&quot;.com&quot;</span>):</span>
+<span class="line">    status = <span class="tok-string">&quot;bad domain&quot;</span></span>
+<span class="line"><span class="tok-keyword">else</span>:</span>
+<span class="line">    status = <span class="tok-string">&quot;ok&quot;</span></span>
+<span class="line"><span class="tok-builtin">print</span>(status, at)</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 15"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 3</p><div class="solution-text"><p>The <code>@</code> is at index 3, which is greater than 0, and there is only one <code>@</code>. The address does not end with <code>.com</code>, so it prints <code>bad domain 3</code>.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-16" data-question="16" data-type="mcq" data-marks="1.5" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 16</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>Questions 16 and 17 are based on the following code. At the end, which variables refer to the int object <code>7</code>?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">a = <span class="tok-number">7</span></span>
+<span class="line">b = <span class="tok-string">&quot;seven&quot;</span></span>
+<span class="line">c = a</span>
+<span class="line">a = b</span>
+<span class="line">b = <span class="tok-number">7.0</span></span>
+<span class="line">d = c</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 16"><label class="option"><input type="radio" name="q16" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>a</code>, <code>c</code> and <code>d</code></span></span></label><label class="option"><input type="radio" name="q16" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>c</code> and <code>d</code></span></span></label><label class="option"><input type="radio" name="q16" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>a</code> and <code>c</code></span></span></label><label class="option"><input type="radio" name="q16" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text">Only <code>c</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — <code>c</code> and <code>d</code></p><div class="solution-text"><p><code>c = a</code> makes <code>c</code> refer to the object 7. Rebinding <code>a</code> to the string object does not affect <code>c</code>. <code>d = c</code> makes <code>d</code> refer to the same int object.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-17" data-question="17" data-type="nat" data-marks="1.5" data-answer="1">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 17</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>For the same code, how many of the variables <code>a</code>, <code>b</code>, <code>c</code> and <code>d</code> refer to a <code>str</code> object at the end?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">a = <span class="tok-number">7</span></span>
+<span class="line">b = <span class="tok-string">&quot;seven&quot;</span></span>
+<span class="line">c = a</span>
+<span class="line">a = b</span>
+<span class="line">b = <span class="tok-number">7.0</span></span>
+<span class="line">d = c</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 17"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 1</p><div class="solution-text"><p>Only <code>a</code> refers to the string <code>"seven"</code>. <code>b</code> was rebound to the float 7.0, and <code>c</code> and <code>d</code> refer to the int 7.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-18" data-question="18" data-type="msq" data-marks="2" data-answer="AB">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 18</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">2 marks · no negative marks</span></header>
+    <div class="question-content"><p>Assume <code>s</code> is a <code>str</code>. Select all expressions that always raise an error.</p></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 18"><label class="option"><input type="checkbox" name="q18" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>s.upper().isalpha().lower()</code></span></span></label><label class="option"><input type="checkbox" name="q18" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>s.split().upper()</code></span></span></label><label class="option"><input type="checkbox" name="q18" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>s.replace('a', 'b').find('b')</code></span></span></label><label class="option"><input type="checkbox" name="q18" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>len(s.title())</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A and B</p><div class="solution-text"><p><code>isalpha()</code> returns a <code>bool</code> and <code>split()</code> returns a <code>list</code>; neither type has the string methods <code>lower</code> or <code>upper</code>. <code>replace</code> returns a string, so <code>find</code> works on it, and <code>len</code> accepts any string.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-19" data-question="19" data-type="mcq" data-marks="1" data-answer="A">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 19</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>What is the value of <code>f"{3.14159:.3f}"</code>?</p></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 19"><label class="option"><input type="radio" name="q19" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>'3.142'</code></span></span></label><label class="option"><input type="radio" name="q19" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>'3.1416'</code></span></span></label><label class="option"><input type="radio" name="q19" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>'3.14'</code></span></span></label><label class="option"><input type="radio" name="q19" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>'3.141'</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A — <code>'3.142'</code></p><div class="solution-text"><p><code>.3f</code> keeps three decimal places and rounds: the fourth decimal is 5, so 3.141 rounds up to 3.142.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-20" data-question="20" data-type="mcq" data-marks="1" data-answer="C">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 20</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>Which statement imports only the <code>sqrt</code> function from the <code>math</code> module?</p></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 20"><label class="option"><input type="radio" name="q20" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>from math.sqrt import *</code></span></span></label><label class="option"><input type="radio" name="q20" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>import math.sqrt</code></span></span></label><label class="option"><input type="radio" name="q20" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>from math import sqrt</code></span></span></label><label class="option"><input type="radio" name="q20" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>import sqrt from math</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> C — <code>from math import sqrt</code></p><div class="solution-text"><p>The syntax is <code>from module import name</code>. <code>import sqrt from math</code> is a <code>SyntaxError</code>, and the other two treat <code>math</code> as a package.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-21" data-question="21" data-type="nat" data-marks="1" data-answer="3">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 21</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>What is the value of <code>len("  a b  c ".split())</code>?</p></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 21"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 3</p><div class="solution-text"><p>With no argument, <code>split()</code> splits on any run of whitespace and ignores leading and trailing spaces, giving <code>["a", "b", "c"]</code>.</p></div></div></details>
+  </article>
+</main>
+<aside class="sidebar" aria-label="Question navigation"><h2>Questions</h2><div class="palette"></div><div class="legend"><span>Not visited</span><span class="l-visited">Visited, unanswered</span><span class="l-answered">Answered</span><span class="l-review">Marked for review</span></div><div class="mini-summary"><span>Attempted</span><b data-count="attempted">0</b><span>Unanswered</span><b data-count="unanswered">21</b><span>For review</span><b data-count="review">0</b></div><a class="btn btn-primary" href="#submission">Review and submit</a></aside>
+</div>
+<section class="wrapup" id="submission"><div class="wrapup-inner">
+<h2>Before you submit</h2>
+<p>Work through the checklist. Select any open item to jump to the first question that still needs attention.</p>
+<ul class="checklist">
+<li><button type="button" data-check="visited"><span class="tick">✓</span><span>Every question has been visited</span><span class="detail"></span></button></li>
+<li><button type="button" data-check="answered"><span class="tick">✓</span><span>Every question has a response</span><span class="detail"></span></button></li>
+<li><button type="button" data-check="review"><span class="tick">✓</span><span>No question is still marked for review</span><span class="detail"></span></button></li>
+</ul>
+<div class="summary-cards"><div><b data-count="attempted">0</b><span>Attempted</span></div><div><b data-count="unanswered">21</b><span>Unanswered</span></div><div><b data-count="review">0</b><span>For review</span></div></div>
+<div class="wrapup-actions"><button class="btn btn-primary" id="submit-btn" type="button">Submit and check answers</button><button class="btn" id="reset-btn" type="button">Reset paper</button><button class="btn" id="print-btn" type="button">Print paper</button></div>
+<div class="score" id="score" hidden><strong></strong><p></p></div>
+</div></section>
+<script>
+const cards = [...document.querySelectorAll('.question-card')];
+const palette = document.querySelector('.palette');
+const state = new Map(cards.map(c => [c.dataset.question, { visited: false, review: false }]));
+const $ = id => document.getElementById(id);
+let submitted = false;
+
+function response(card) {
+  if (card.dataset.type === 'nat') return card.querySelector('.nat-input').value.trim();
+  return [...card.querySelectorAll('input:checked')].map(i => i.value).join('');
+}
+function isCorrect(card) {
+  const given = response(card), key = card.dataset.answer;
+  if (card.dataset.type === 'nat') return given !== '' && Math.abs(Number(given) - Number(key)) < 1e-9;
+  return given === key;
+}
+function setCount(name, value) {
+  document.querySelectorAll('[data-count="' + name + '"]').forEach(el => { el.textContent = value; });
+}
+function goTo(card) {
+  card.scrollIntoView({ behavior: 'smooth' });
+  state.get(card.dataset.question).visited = true;
+  refresh();
+}
+
+function refresh() {
+  let answered = 0, review = 0, visited = 0;
+  cards.forEach(card => {
+    const n = card.dataset.question, s = state.get(n), a = response(card) !== '';
+    const b = palette.querySelector('[data-target="' + n + '"]');
+    answered += a; review += s.review; visited += s.visited;
+    b.classList.toggle('visited', s.visited);
+    b.classList.toggle('answered', a);
+    b.classList.toggle('review', s.review);
+    b.setAttribute('aria-label', 'Question ' + n + (a ? ', answered' : ', unanswered') + (s.review ? ', marked for review' : ''));
+  });
+  const total = cards.length;
+  setCount('attempted', answered);
+  setCount('unanswered', total - answered);
+  setCount('review', review);
+  const checks = { visited: [visited === total, visited + ' / ' + total], answered: [answered === total, answered + ' / ' + total], review: [review === 0, review + ' flagged'] };
+  for (const [name, [done, detail]] of Object.entries(checks)) {
+    const item = document.querySelector('[data-check="' + name + '"]');
+    item.classList.toggle('done', done);
+    item.querySelector('.detail').textContent = detail;
+  }
+}
+
+cards.forEach(card => {
+  const n = card.dataset.question, s = state.get(n);
+  const b = document.createElement('button');
+  b.type = 'button'; b.textContent = n; b.dataset.target = n;
+  b.addEventListener('click', () => goTo(card));
+  palette.appendChild(b);
+  card.querySelectorAll('.options input, .nat-input').forEach(i => i.addEventListener('input', refresh));
+  const reviewBtn = card.querySelector('.review-btn');
+  reviewBtn.addEventListener('click', () => {
+    s.review = !s.review;
+    reviewBtn.classList.toggle('active', s.review);
+    reviewBtn.setAttribute('aria-pressed', s.review);
+    reviewBtn.textContent = s.review ? 'Marked for review' : 'Mark for review';
+    refresh();
+  });
+  card.querySelector('.clear-btn').addEventListener('click', () => {
+    card.querySelectorAll('.options input').forEach(i => { i.checked = false; });
+    const nat = card.querySelector('.nat-input');
+    if (nat) nat.value = '';
+    refresh();
+  });
+});
+
+const visitObserver = new IntersectionObserver(entries => {
+  let changed = false;
+  entries.forEach(e => { if (e.isIntersecting) { state.get(e.target.dataset.question).visited = true; changed = true; } });
+  if (changed) refresh();
+}, { threshold: .25 });
+cards.forEach(c => visitObserver.observe(c));
+
+// Each checklist row jumps to the first question that still fails that check.
+const failing = {
+  visited: c => !state.get(c.dataset.question).visited,
+  answered: c => response(c) === '',
+  review: c => state.get(c.dataset.question).review
+};
+document.querySelectorAll('[data-check]').forEach(item => item.addEventListener('click', () => {
+  const card = cards.find(failing[item.dataset.check]);
+  if (card) goTo(card);
+}));
+
+function lock(locked) {
+  cards.forEach(card => card.querySelectorAll('.options input, .nat-input, .clear-btn').forEach(el => { el.disabled = locked; }));
+  $('submit-btn').disabled = locked;
+}
+$('submit-btn').addEventListener('click', () => {
+  const blank = cards.filter(c => response(c) === '').length;
+  if (blank && !confirm(blank + ' question' + (blank === 1 ? ' is' : 's are') + ' unanswered. Submit anyway?')) return;
+  submitted = true;
+  let score = 0, max = 0, right = 0, wrong = 0;
+  cards.forEach(card => {
+    const marks = Number(card.dataset.marks), given = response(card), ok = isCorrect(card);
+    const verdict = given === '' ? 'skipped' : ok ? 'correct' : 'incorrect';
+    max += marks;
+    if (ok) { score += marks; right++; } else if (given !== '') wrong++;
+    const tag = card.querySelector('.result-tag');
+    tag.hidden = false;
+    tag.className = 'result-tag ' + verdict;
+    tag.textContent = verdict === 'correct' ? 'Correct · +' + marks : verdict === 'incorrect' ? 'Incorrect · 0' : 'Not attempted';
+    palette.querySelector('[data-target="' + card.dataset.question + '"]').classList.add(verdict);
+    card.querySelectorAll('.option').forEach(opt => {
+      const input = opt.querySelector('input'), isKey = card.dataset.answer.includes(input.value);
+      opt.classList.toggle('is-correct', isKey);
+      opt.classList.toggle('is-wrong', input.checked && !isKey);
+    });
+    const nat = card.querySelector('.nat-input');
+    if (nat && given !== '') nat.classList.add(ok ? 'is-correct' : 'is-wrong');
+  });
+  lock(true);
+  const box = $('score');
+  box.hidden = false;
+  box.querySelector('strong').textContent = score + ' / ' + max + ' marks';
+  box.querySelector('p').textContent = right + ' correct, ' + wrong + ' incorrect, ' + (cards.length - right - wrong) + ' not attempted. MSQs earn marks only when exactly the correct set is selected. Open each solution to review your working.';
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+$('reset-btn').addEventListener('click', () => {
+  if (!confirm('Clear every response and start the paper again?')) return;
+  submitted = false;
+  cards.forEach(card => {
+    const s = state.get(card.dataset.question);
+    s.visited = false; s.review = false;
+    card.querySelectorAll('.options input').forEach(i => { i.checked = false; });
+    card.querySelectorAll('.option').forEach(o => o.classList.remove('is-correct', 'is-wrong'));
+    const nat = card.querySelector('.nat-input');
+    if (nat) { nat.value = ''; nat.classList.remove('is-correct', 'is-wrong'); }
+    const reviewBtn = card.querySelector('.review-btn');
+    reviewBtn.classList.remove('active'); reviewBtn.setAttribute('aria-pressed', 'false'); reviewBtn.textContent = 'Mark for review';
+    card.querySelector('.result-tag').hidden = true;
+    card.querySelector('.solution').open = false;
+    palette.querySelector('[data-target="' + card.dataset.question + '"]').classList.remove('correct', 'incorrect', 'skipped');
+  });
+  lock(false);
+  $('score').hidden = true;
+  refresh();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+$('print-btn').addEventListener('click', () => window.print());
+
+document.querySelectorAll('.copy-code').forEach(btn => btn.addEventListener('click', async event => {
+  event.preventDefault(); // a code block inside an option must not toggle that option
+  const text = btn.closest('.code-wrap').querySelector('code').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  btn.textContent = 'Copied'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1200);
+}));
+refresh();
+</script>
+</body>
+</html>
