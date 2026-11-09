@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Week 6 Revision Paper 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --ink: #16181d; --muted: #5c6370; --canvas: #f8f8fc; --alt: #f0f1f7; --paper: #fff;
+  --rule: #e0e2ea; --blue: #1a73e8; --blue-soft: #e8f0fe; --green: #188038; --green-soft: #e6f4ea;
+  --amber: #b06000; --amber-soft: #fef7e0; --red: #c5221f; --red-soft: #fce8e6;
+  --serif: Fraunces, Georgia, "Times New Roman", serif;
+  --sans: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; overflow-x: hidden; background: var(--canvas); color: var(--ink); font: 16px/1.7 var(--sans); }
+button, input { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid rgba(26, 115, 232, .35); outline-offset: 2px; }
+
+.hero { border-bottom: 1px solid var(--rule); padding: 72px 20px 48px; }
+.hero-inner, .layout { max-width: 1000px; margin: 0 auto; }
+.eyebrow { font: 600 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--blue); }
+.hero h1 { font: 600 clamp(36px, 6vw, 64px)/1.05 var(--serif); letter-spacing: -.02em; margin: 14px 0 16px; text-wrap: balance; }
+.hero p { max-width: 640px; margin: 0; color: var(--muted); font-size: 17px; }
+.paper-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.paper-meta span { border: 1px solid var(--rule); background: var(--paper); padding: 5px 11px; border-radius: 999px; font: 500 12px/1.4 var(--mono); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 740px) minmax(0, 220px); gap: 40px; padding: 48px 20px 40px; }
+.layout > * { min-width: 0; }
+.instructions { background: var(--alt); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 20px 24px; margin-bottom: 32px; }
+.instructions h2, .wrapup h2 { font: 600 26px/1.2 var(--serif); margin: 0 0 8px; }
+.instructions ul { margin: 0; padding-left: 20px; }
+
+.question-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 26px 28px; margin: 0 0 28px; scroll-margin-top: 16px; }
+.question-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-bottom: 1px solid var(--rule); padding-bottom: 14px; margin-bottom: 18px; }
+.question-title { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.question-number { font: 600 20px/1.3 var(--serif); }
+.badge, .result-tag { border-radius: 999px; padding: 3px 9px; font: 600 11px/1.4 var(--mono); letter-spacing: .04em; }
+.badge { background: var(--blue-soft); color: #174ea6; }
+.result-tag.correct { background: var(--green-soft); color: var(--green); }
+.result-tag.incorrect { background: var(--red-soft); color: var(--red); }
+.result-tag.skipped { background: var(--alt); color: var(--muted); }
+.marks { color: var(--muted); font: 500 12px/1.5 var(--mono); text-align: right; white-space: nowrap; }
+.question-content > :first-child { margin-top: 0; }
+.question-content p { margin: 0 0 12px; }
+.type-hint { margin: 18px 0 8px; color: var(--muted); font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+:not(pre) > code { background: var(--alt); border-radius: 5px; padding: .12em .38em; font: 88%/1.5 var(--mono); overflow-wrap: anywhere; }
+
+.code-wrap { background: #f4f5fa; border: 1px solid var(--rule); border-radius: 10px; margin: 16px 0; overflow: hidden; max-width: 100%; }
+.code-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 8px 6px 14px; border-bottom: 1px solid var(--rule); background: #eceef5; }
+.code-label { color: var(--muted); font: 600 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.copy-code { border: 1px solid #c9cdd8; background: var(--paper); color: var(--ink); border-radius: 6px; padding: 3px 10px; font: 600 11px/1.5 var(--mono); }
+.copy-code:hover { border-color: var(--blue); color: var(--blue); }
+.copy-code.copied { border-color: var(--green); color: var(--green); }
+.code-caption { margin: 18px 0 -8px; font-weight: 600; font-size: 14px; }
+.code-wrap pre { margin: 0; padding: 14px 16px; overflow-x: auto; tab-size: 4; }
+.code-wrap code { white-space: pre; font: 13.5px/1.7 var(--mono); color: var(--ink); }
+.code-wrap.numbered code { counter-reset: line; }
+.code-wrap.numbered .line::before { counter-increment: line; content: counter(line); display: inline-block; width: 1.6em; margin-right: 1.2em; text-align: right; color: #9aa0ad; user-select: none; }
+.code-wrap.is-output { background: var(--paper); border-left: 3px solid var(--ink); }
+.code-wrap.is-output .code-bar { background: var(--paper); }
+.tok-keyword { color: #8430ce; font-weight: 600; }
+.tok-string { color: #0b7a3b; }
+.tok-number, .tok-const { color: #b45309; }
+.tok-comment { color: #7a8190; font-style: italic; }
+.tok-builtin, .tok-func { color: #1967d2; }
+
+.options { display: grid; gap: 10px; margin: 0 0 18px; }
+.option { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; background: var(--paper); cursor: pointer; transition: border-color .15s, background .15s; min-width: 0; }
+.option:hover { border-color: #a8c7fa; }
+.option:has(input:checked) { border-color: var(--blue); background: #f5f9ff; box-shadow: 0 0 0 1px var(--blue); }
+.option input { margin: 6px 0 0; width: 16px; height: 16px; flex: 0 0 16px; accent-color: var(--blue); }
+.option-letter { flex: 0 0 auto; margin-top: 3px; color: var(--muted); font: 600 13px/1.7 var(--mono); }
+.option-letter::after { content: "."; }
+.option-body { min-width: 0; flex: 1; }
+.option-text code, .answer-line code { white-space: pre-wrap; }
+.option-body .code-wrap { margin: 0; }
+.option-text + .code-wrap { margin-top: 10px; }
+.option.is-correct { border-color: var(--green); background: var(--green-soft); box-shadow: none; }
+.option.is-wrong { border-color: var(--red); background: var(--red-soft); box-shadow: none; }
+
+.nat-label { display: block; margin: 0 0 18px; font-weight: 600; font-size: 14px; }
+.nat-input { display: block; width: min(280px, 100%); margin-top: 6px; border: 1px solid #c9cdd8; border-radius: 8px; padding: 10px 12px; background: var(--paper); font: 15px/1.4 var(--mono); }
+.nat-input:focus { border-color: var(--blue); }
+.nat-input.is-correct { border-color: var(--green); background: var(--green-soft); }
+.nat-input.is-wrong { border-color: var(--red); background: var(--red-soft); }
+
+.question-actions, .wrapup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.question-actions button, .btn { border: 1px solid #c9cdd8; background: var(--paper); color: var(--ink); border-radius: 8px; padding: 7px 13px; font-size: 13px; font-weight: 600; }
+.question-actions button:hover, .btn:hover { border-color: var(--blue); color: var(--blue); }
+.review-btn.active { background: var(--amber-soft); color: var(--amber); border-color: #e9c46a; }
+.btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn-primary:hover { background: #1765cc; color: #fff; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+.solution { border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 14px; }
+.solution summary { color: var(--blue); font-weight: 600; font-size: 14px; cursor: pointer; }
+.solution-inner { margin-top: 12px; background: var(--canvas); border-radius: 10px; padding: 16px 18px; }
+.solution-inner p { margin: 0 0 10px; }
+.solution-inner > :last-child, .solution-text > :last-child { margin-bottom: 0; }
+.answer-line { color: var(--green); }
+
+.diagram { margin: 16px 0; text-align: center; }
+.diagram img { display: block; max-width: 100%; height: auto; margin: auto; border: 1px solid var(--rule); border-radius: 10px; background: #fff; }
+.table-scroll { overflow-x: auto; }
+.data-table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+.data-table th, .data-table td { border: 1px solid var(--rule); padding: 8px 10px; text-align: left; }
+.data-table th { background: var(--alt); }
+
+.sidebar { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 18px; }
+.sidebar h2 { font: 600 18px/1.2 var(--serif); margin: 0 0 12px; }
+.palette { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.palette button { position: relative; min-width: 0; aspect-ratio: 1; border: 1px solid #c9cdd8; background: var(--paper); border-radius: 7px; color: var(--muted); font: 600 12px/1 var(--mono); padding: 0; }
+.palette button.visited { border-color: var(--blue); background: var(--blue-soft); color: #174ea6; }
+.palette button.answered { background: var(--green); border-color: var(--green); color: #fff; }
+.palette button.review { background: var(--amber-soft); border-color: #e9a100; color: var(--amber); }
+.palette button.review.answered::after { content: ""; position: absolute; right: 3px; top: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.palette button.correct { background: var(--green); border-color: var(--green); color: #fff; }
+.palette button.incorrect { background: var(--red); border-color: var(--red); color: #fff; }
+.palette button.skipped { background: var(--alt); border-color: #c9cdd8; color: var(--muted); }
+.legend { display: grid; gap: 5px; margin: 14px 0; font-size: 12px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; background: var(--paper); border: 1px solid #c9cdd8; }
+.legend .l-visited::before { background: var(--blue-soft); border-color: var(--blue); }
+.legend .l-answered::before { background: var(--green); border-color: var(--green); }
+.legend .l-review::before { background: var(--amber-soft); border-color: #e9a100; }
+.mini-summary { border-top: 1px solid var(--rule); padding-top: 12px; display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; font-size: 13px; }
+.mini-summary b { font-family: var(--mono); }
+.sidebar .btn { display: block; width: 100%; margin-top: 14px; text-align: center; text-decoration: none; }
+
+.wrapup { background: var(--alt); border-top: 1px solid var(--rule); padding: 56px 20px 64px; }
+.wrapup-inner { max-width: 1000px; margin: 0 auto; }
+.wrapup-inner > * { max-width: 740px; }
+.wrapup p { margin: 0 0 18px; color: var(--muted); }
+.checklist { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 8px; }
+.checklist button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+.checklist .tick { flex: 0 0 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid #c9cdd8; color: transparent; font: 700 12px/1 var(--mono); }
+.checklist .done .tick { background: var(--green); border-color: var(--green); color: #fff; }
+.checklist .detail { margin-left: auto; color: var(--muted); font: 500 12px/1.4 var(--mono); white-space: nowrap; }
+.summary-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 24px; }
+.summary-cards div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; }
+.summary-cards b { display: block; font: 600 30px/1.1 var(--serif); }
+.summary-cards span { color: var(--muted); font: 500 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.score { margin-top: 24px; background: var(--paper); border: 1px solid var(--rule); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 18px 22px; }
+.score strong { display: block; font: 600 30px/1.2 var(--serif); color: var(--ink); }
+.score p { margin: 6px 0 0; }
+.paper-footer { padding: 24px 20px 40px; color: var(--muted); text-align: center; font-size: 12px; background: var(--alt); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 28px; }
+  .sidebar { position: static; grid-row: 1; max-height: none; }
+  .palette { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
+}
+@media (max-width: 560px) {
+  body { font-size: 15px; }
+  .hero { padding: 44px 16px 32px; }
+  .layout { padding: 20px 12px 32px; }
+  .question-card { padding: 18px 16px; border-radius: 12px; }
+  .question-head { display: block; }
+  .marks { display: block; text-align: left; margin-top: 6px; }
+  .code-wrap pre { padding: 12px; }
+  .code-wrap code { font-size: 12.5px; }
+  .summary-cards b { font-size: 24px; }
+  .summary-cards div { padding: 12px; }
+  .checklist .detail { display: none; }
+  .wrapup { padding: 40px 16px 48px; }
+}
+@media print {
+  body { background: #fff; }
+  .hero { padding: 0 0 16px; }
+  .layout { display: block; max-width: none; padding: 16px 0; }
+  .sidebar, .question-actions, .copy-code, .wrapup, .paper-footer, .solution, .type-hint { display: none; }
+  .question-card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><div class="eyebrow">Python · Week 6 · Dictionaries, sets, and tuples</div><h1>Week 6 Revision Paper 3</h1><p>Keys from a remainder, grouping keys by value, a dictionary of dictionaries, sorting tuples, set methods, a list shared by two keys, get with a default, same letters with sets, a pair sum with a set, a sparse matrix with tuple keys, a vote tally, and a probability from a frequency dictionary as in Assignment 5.</p><div class="paper-meta"><span>24 questions</span><span>55 marks</span><span>90 minutes</span><span>13 MCQ · 5 MSQ · 6 NAT</span><span>No negative marking</span></div></div></header>
+<div class="layout">
+<main>
+<section class="instructions"><h2>Instructions</h2><ul><li>MCQ has exactly one correct option; MSQ has one or more correct options.</li><li>Enter only the requested number for NAT questions. Unless stated otherwise, assume standard Python 3 behaviour.</li><li>Solutions are collapsed. Attempt each question before opening its solution, then submit at the end to see your score.</li></ul></section>
+<article class="question-card" id="question-1" data-question="1" data-type="mcq" data-marks="3" data-answer="D">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 1</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">d = <span class="tok-builtin">dict</span>()</span>
+<span class="line"><span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-number">5</span>):</span>
+<span class="line">    d[i % <span class="tok-number">3</span>] = i</span>
+<span class="line"><span class="tok-builtin">print</span>(d, <span class="tok-builtin">len</span>(d))</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 1"><label class="option"><input type="radio" name="q1" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>{0: 0, 1: 1, 2: 2} 3</code></span></span></label><label class="option"><input type="radio" name="q1" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>{3: 0, 4: 1, 2: 2} 3</code></span></span></label><label class="option"><input type="radio" name="q1" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>{0: 3, 1: 4, 2: 2} 5</code></span></span></label><label class="option"><input type="radio" name="q1" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>{0: 3, 1: 4, 2: 2} 3</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> D — <code>{0: 3, 1: 4, 2: 2} 3</code></p><div class="solution-text"><p>The keys are <code>i % 3</code>, so only 0, 1 and 2 occur. Each later <code>i</code> with the same remainder overwrites the value: 3 replaces 0 and 4 replaces 1.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">{0: 3, 1: 4, 2: 2} 3</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-2" data-question="2" data-type="mcq" data-marks="3" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 2</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Select the correct implementation of a function <code>group(d)</code> that returns a new dictionary mapping each value of <code>d</code> to the list of keys that have that value, in the order of the keys in <code>d</code>.</p></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 2"><label class="option"><input type="radio" name="q2" value="A"><span class="option-letter">A</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option A</span><button class="copy-code" type="button" aria-label="Copy Option A to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">group</span>(d):</span>
+<span class="line">    r = {}</span>
+<span class="line">    <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> d:</span>
+<span class="line">        r[d[k]] = [k]</span>
+<span class="line">    <span class="tok-keyword">return</span> r</span></code></pre></div></span></label><label class="option"><input type="radio" name="q2" value="B"><span class="option-letter">B</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option B</span><button class="copy-code" type="button" aria-label="Copy Option B to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">group</span>(d):</span>
+<span class="line">    r = {}</span>
+<span class="line">    <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> d:</span>
+<span class="line">        v = d[k]</span>
+<span class="line">        <span class="tok-keyword">if</span> v <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> r:</span>
+<span class="line">            r[v] = []</span>
+<span class="line">        r[v].<span class="tok-func">append</span>(k)</span>
+<span class="line">    <span class="tok-keyword">return</span> r</span></code></pre></div></span></label><label class="option"><input type="radio" name="q2" value="C"><span class="option-letter">C</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option C</span><button class="copy-code" type="button" aria-label="Copy Option C to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">group</span>(d):</span>
+<span class="line">    r = {}</span>
+<span class="line">    <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> d:</span>
+<span class="line">        r[k] = r.<span class="tok-func">get</span>(k, []) + [d[k]]</span>
+<span class="line">    <span class="tok-keyword">return</span> r</span></code></pre></div></span></label><label class="option"><input type="radio" name="q2" value="D"><span class="option-letter">D</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option D</span><button class="copy-code" type="button" aria-label="Copy Option D to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">group</span>(d):</span>
+<span class="line">    r = {}</span>
+<span class="line">    <span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> d:</span>
+<span class="line">        v = d[k]</span>
+<span class="line">        <span class="tok-keyword">if</span> v <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> r:</span>
+<span class="line">            r[v] = []</span>
+<span class="line">        <span class="tok-keyword">else</span>:</span>
+<span class="line">            r[v].<span class="tok-func">append</span>(k)</span>
+<span class="line">    <span class="tok-keyword">return</span> r</span></code></pre></div></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B</p><div class="solution-text"><p>A new value needs an empty list first, and then every key is appended. <code>r[d[k]] = [k]</code> replaces the list each time, keeping only the last key. Appending only in the <code>else</code> drops the first key of each value. The last version keeps <code>d</code>'s keys as keys.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-3" data-question="3" data-type="mcq" data-marks="3" data-answer="D">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 3</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">library = {</span>
+<span class="line">    <span class="tok-string">&#39;fiction&#39;</span>: {<span class="tok-string">&#39;Dune&#39;</span>: <span class="tok-number">3</span>, <span class="tok-string">&#39;Emma&#39;</span>: <span class="tok-number">0</span>},</span>
+<span class="line">    <span class="tok-string">&#39;science&#39;</span>: {<span class="tok-string">&#39;Cosmos&#39;</span>: <span class="tok-number">2</span>},</span>
+<span class="line">}</span>
+<span class="line">library[<span class="tok-string">&#39;science&#39;</span>][<span class="tok-string">&#39;Origin&#39;</span>] = <span class="tok-number">1</span></span>
+<span class="line">library[<span class="tok-string">&#39;fiction&#39;</span>][<span class="tok-string">&#39;Emma&#39;</span>] += <span class="tok-number">4</span></span>
+<span class="line">total = <span class="tok-number">0</span></span>
+<span class="line"><span class="tok-keyword">for</span> shelf <span class="tok-keyword">in</span> library:</span>
+<span class="line">    <span class="tok-keyword">for</span> book <span class="tok-keyword">in</span> library[shelf]:</span>
+<span class="line">        total += library[shelf][book]</span>
+<span class="line"><span class="tok-builtin">print</span>(<span class="tok-builtin">len</span>(library), <span class="tok-builtin">len</span>(library[<span class="tok-string">&#39;science&#39;</span>]), total)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 3"><label class="option"><input type="radio" name="q3" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>2 2 6</code></span></span></label><label class="option"><input type="radio" name="q3" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>3 2 10</code></span></span></label><label class="option"><input type="radio" name="q3" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>2 1 9</code></span></span></label><label class="option"><input type="radio" name="q3" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>2 2 10</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> D — <code>2 2 10</code></p><div class="solution-text"><p><code>library</code> has two shelves; science gains a second book. Emma goes from 0 to 4, so the counts are 3 + 4 + 2 + 1.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">2 2 10</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-4" data-question="4" data-type="mcq" data-marks="3" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 4</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">pairs = [(<span class="tok-number">2</span>, <span class="tok-string">&#39;b&#39;</span>), (<span class="tok-number">1</span>, <span class="tok-string">&#39;z&#39;</span>), (<span class="tok-number">2</span>, <span class="tok-string">&#39;a&#39;</span>), (<span class="tok-number">1</span>, <span class="tok-string">&#39;c&#39;</span>)]</span>
+<span class="line">pairs.<span class="tok-func">sort</span>()</span>
+<span class="line"><span class="tok-builtin">print</span>(pairs[<span class="tok-number">0</span>], pairs[-<span class="tok-number">1</span>], <span class="tok-builtin">max</span>(pairs)[<span class="tok-number">1</span>])</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 4"><label class="option"><input type="radio" name="q4" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>(1, 'c') (2, 'b') z</code></span></span></label><label class="option"><input type="radio" name="q4" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>(1, 'c') (2, 'b') b</code></span></span></label><label class="option"><input type="radio" name="q4" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>(1, 'z') (2, 'b') b</code></span></span></label><label class="option"><input type="radio" name="q4" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>(1, 'z') (2, 'a') a</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — <code>(1, 'c') (2, 'b') b</code></p><div class="solution-text"><p>Tuples are compared element by element: first by the number, and only on a tie by the letter. So the order is <code>(1, 'c')</code>, <code>(1, 'z')</code>, <code>(2, 'a')</code>, <code>(2, 'b')</code>, and <code>max</code> is the last of them.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">(1, &#39;c&#39;) (2, &#39;b&#39;) b</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-5" data-question="5" data-type="mcq" data-marks="3" data-answer="D">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 5</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">s = {<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>}</span>
+<span class="line">s.<span class="tok-func">add</span>(<span class="tok-number">20</span>)</span>
+<span class="line">s.<span class="tok-func">add</span>(<span class="tok-number">40</span>)</span>
+<span class="line">s.<span class="tok-func">discard</span>(<span class="tok-number">50</span>)</span>
+<span class="line">s.<span class="tok-func">remove</span>(<span class="tok-number">10</span>)</span>
+<span class="line"><span class="tok-builtin">print</span>(<span class="tok-builtin">sorted</span>(s), <span class="tok-number">20</span> <span class="tok-keyword">in</span> s, <span class="tok-builtin">len</span>(s))</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 5"><label class="option"><input type="radio" name="q5" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>[20, 30, 40, 50] True 4</code></span></span></label><label class="option"><input type="radio" name="q5" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>[10, 20, 30, 40] True 4</code></span></span></label><label class="option"><input type="radio" name="q5" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>[20, 20, 30, 40] True 4</code></span></span></label><label class="option"><input type="radio" name="q5" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>[20, 30, 40] True 3</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> D — <code>[20, 30, 40] True 3</code></p><div class="solution-text"><p>Adding 20 again changes nothing. <code>discard</code> removes a value only if it is there, so 50 causes no error. <code>remove(10)</code> takes 10 out.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">[20, 30, 40] True 3</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-6" data-question="6" data-type="mcq" data-marks="3" data-answer="C">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 6</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">row = [<span class="tok-number">0</span>, <span class="tok-number">0</span>]</span>
+<span class="line">grid = {<span class="tok-string">&#39;a&#39;</span>: row, <span class="tok-string">&#39;b&#39;</span>: row}</span>
+<span class="line">grid[<span class="tok-string">&#39;a&#39;</span>][<span class="tok-number">0</span>] = <span class="tok-number">5</span></span>
+<span class="line">grid[<span class="tok-string">&#39;b&#39;</span>] = [<span class="tok-number">1</span>, <span class="tok-number">1</span>]</span>
+<span class="line">grid[<span class="tok-string">&#39;b&#39;</span>][<span class="tok-number">1</span>] = <span class="tok-number">7</span></span>
+<span class="line"><span class="tok-builtin">print</span>(grid[<span class="tok-string">&#39;a&#39;</span>], grid[<span class="tok-string">&#39;b&#39;</span>], row)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 6"><label class="option"><input type="radio" name="q6" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>[5, 0] [5, 7] [5, 0]</code></span></span></label><label class="option"><input type="radio" name="q6" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>[5, 7] [1, 7] [5, 7]</code></span></span></label><label class="option"><input type="radio" name="q6" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>[5, 0] [1, 7] [5, 0]</code></span></span></label><label class="option"><input type="radio" name="q6" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>[5, 0] [1, 7] [0, 0]</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> C — <code>[5, 0] [1, 7] [5, 0]</code></p><div class="solution-text"><p>Both keys first hold the same list <code>row</code>, so changing <code>grid['a'][0]</code> changes <code>row</code>. <code>grid['b'] = [1, 1]</code> points key b at a new list, and only that new list gets the 7.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">[5, 0] [1, 7] [5, 0]</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-7" data-question="7" data-type="mcq" data-marks="3" data-answer="D">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 7</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">codes = {<span class="tok-string">&#39;IN&#39;</span>: <span class="tok-string">&#39;India&#39;</span>, <span class="tok-string">&#39;FR&#39;</span>: <span class="tok-string">&#39;France&#39;</span>}</span>
+<span class="line">names = [<span class="tok-string">&#39;IN&#39;</span>, <span class="tok-string">&#39;US&#39;</span>, <span class="tok-string">&#39;FR&#39;</span>, <span class="tok-string">&#39;US&#39;</span>]</span>
+<span class="line">out = []</span>
+<span class="line"><span class="tok-keyword">for</span> c <span class="tok-keyword">in</span> names:</span>
+<span class="line">    out.<span class="tok-func">append</span>(codes.<span class="tok-func">get</span>(c, c.<span class="tok-func">lower</span>()))</span>
+<span class="line"><span class="tok-builtin">print</span>(out)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 7"><label class="option"><input type="radio" name="q7" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>['India', 'France']</code></span></span></label><label class="option"><input type="radio" name="q7" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>['India', 'US', 'France', 'US']</code></span></span></label><label class="option"><input type="radio" name="q7" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>['India', None, 'France', None]</code></span></span></label><label class="option"><input type="radio" name="q7" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>['India', 'us', 'France', 'us']</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> D — <code>['India', 'us', 'France', 'us']</code></p><div class="solution-text"><p>For a missing key, <code>get</code> returns its second argument, here the code in lower case. The list keeps one entry per name, including both US entries.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">[&#39;India&#39;, &#39;us&#39;, &#39;France&#39;, &#39;us&#39;]</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-8" data-question="8" data-type="mcq" data-marks="3" data-answer="C">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 8</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Both snippets define <code>same_letters(a, b)</code>, which should return <code>True</code> if the two strings use exactly the same letters, ignoring how many times each letter occurs (so <code>'aab'</code> and <code>'ba'</code> count as the same). Choose the correct option.</p><p class="code-caption">Snippet-1</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Snippet-1</span><button class="copy-code" type="button" aria-label="Copy Snippet-1 to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">same_letters</span>(a, b):</span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-builtin">sorted</span>(a) == <span class="tok-builtin">sorted</span>(b)</span></code></pre></div><p class="code-caption">Snippet-2</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Snippet-2</span><button class="copy-code" type="button" aria-label="Copy Snippet-2 to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">same_letters</span>(a, b):</span>
+<span class="line">    <span class="tok-keyword">for</span> ch <span class="tok-keyword">in</span> a:</span>
+<span class="line">        <span class="tok-keyword">if</span> ch <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> b:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">False</span></span>
+<span class="line">    <span class="tok-keyword">for</span> ch <span class="tok-keyword">in</span> b:</span>
+<span class="line">        <span class="tok-keyword">if</span> ch <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> a:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">False</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">True</span></span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 8"><label class="option"><input type="radio" name="q8" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text">Both snippets are incorrect</span></span></label><label class="option"><input type="radio" name="q8" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text">Both snippets are correct</span></span></label><label class="option"><input type="radio" name="q8" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text">Only Snippet-2 is correct</span></span></label><label class="option"><input type="radio" name="q8" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text">Only Snippet-1 is correct</span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> C — Only Snippet-2 is correct</p><div class="solution-text"><p>Snippet-1 compares the sorted letters, which also compares how many times each occurs, so <code>'aab'</code> and <code>'ba'</code> give <code>False</code>. Snippet-2 checks both directions: every letter of <code>a</code> is in <code>b</code> and every letter of <code>b</code> is in <code>a</code>, which is the same as <code>set(a) == set(b)</code>.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-9" data-question="9" data-type="msq" data-marks="3" data-answer="AC">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 9</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Select all correct implementations of a function <code>pair_sum(L, target)</code> that returns <code>True</code> if two elements at different positions of <code>L</code> add up to <code>target</code>, and <code>False</code> otherwise.</p></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 9"><label class="option"><input type="checkbox" name="q9" value="A"><span class="option-letter">A</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option A</span><button class="copy-code" type="button" aria-label="Copy Option A to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">pair_sum</span>(L, target):</span>
+<span class="line">    seen = <span class="tok-builtin">set</span>()</span>
+<span class="line">    <span class="tok-keyword">for</span> x <span class="tok-keyword">in</span> L:</span>
+<span class="line">        <span class="tok-keyword">if</span> target - x <span class="tok-keyword">in</span> seen:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">        seen.<span class="tok-func">add</span>(x)</span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q9" value="B"><span class="option-letter">B</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option B</span><button class="copy-code" type="button" aria-label="Copy Option B to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">pair_sum</span>(L, target):</span>
+<span class="line">    seen = <span class="tok-builtin">set</span>(L)</span>
+<span class="line">    <span class="tok-keyword">for</span> x <span class="tok-keyword">in</span> L:</span>
+<span class="line">        <span class="tok-keyword">if</span> target - x <span class="tok-keyword">in</span> seen:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q9" value="C"><span class="option-letter">C</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option C</span><button class="copy-code" type="button" aria-label="Copy Option C to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">pair_sum</span>(L, target):</span>
+<span class="line">    <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-builtin">len</span>(L)):</span>
+<span class="line">        <span class="tok-keyword">for</span> j <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(i + <span class="tok-number">1</span>, <span class="tok-builtin">len</span>(L)):</span>
+<span class="line">            <span class="tok-keyword">if</span> L[i] + L[j] == target:</span>
+<span class="line">                <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q9" value="D"><span class="option-letter">D</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option D</span><button class="copy-code" type="button" aria-label="Copy Option D to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">pair_sum</span>(L, target):</span>
+<span class="line">    seen = <span class="tok-builtin">set</span>()</span>
+<span class="line">    <span class="tok-keyword">for</span> x <span class="tok-keyword">in</span> L:</span>
+<span class="line">        seen.<span class="tok-func">add</span>(x)</span>
+<span class="line">        <span class="tok-keyword">if</span> target - x <span class="tok-keyword">in</span> seen:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A and C</p><div class="solution-text"><p>The set must hold only the elements before <code>x</code>. When it already holds all of <code>L</code>, or <code>x</code> is added before the check, <code>x</code> can pair with itself: <code>pair_sum([3], 6)</code> gives <code>True</code>. The double loop compares each pair of positions once.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-10" data-question="10" data-type="msq" data-marks="3" data-answer="ABC">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 10</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Consider the dictionary below. Select all statements that print <code>3</code>.</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">data = {<span class="tok-string">&#39;a&#39;</span>: (<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">&#39;b&#39;</span>: {<span class="tok-string">&#39;c&#39;</span>: <span class="tok-number">3</span>}, <span class="tok-string">&#39;d&#39;</span>: [<span class="tok-number">0</span>, <span class="tok-number">3</span>]}</span></code></pre></div></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 10"><label class="option"><input type="checkbox" name="q10" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>print(data['a'][-1])</code></span></span></label><label class="option"><input type="checkbox" name="q10" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>print(data['b']['c'])</code></span></span></label><label class="option"><input type="checkbox" name="q10" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>print(len(data))</code></span></span></label><label class="option"><input type="checkbox" name="q10" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>print(data['d'].index(3))</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A, B and C</p><div class="solution-text"><p><code>data['a']</code> is a tuple whose last element is 3, and <code>data['b']</code> is a dictionary with key c. The outer dictionary has three keys. <code>index(3)</code> gives the position of 3 in <code>[0, 3]</code>, which is 1.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-11" data-question="11" data-type="msq" data-marks="3" data-answer="ACD">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 11</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p><code>A</code> and <code>B</code> are lists of integers. Select all statements that are true after <code>r = only_first(A, B)</code> runs, for any such <code>A</code> and <code>B</code>.</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">only_first</span>(A, B):</span>
+<span class="line">    r = []</span>
+<span class="line">    <span class="tok-keyword">for</span> x <span class="tok-keyword">in</span> A:</span>
+<span class="line">        <span class="tok-keyword">if</span> x <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> B:</span>
+<span class="line">            r.<span class="tok-func">append</span>(x)</span>
+<span class="line">    <span class="tok-keyword">return</span> r</span></code></pre></div></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 11"><label class="option"><input type="checkbox" name="q11" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>set(r)</code> is equal to <code>set(A) - set(B)</code></span></span></label><label class="option"><input type="checkbox" name="q11" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>len(r)</code> is equal to <code>len(set(A) - set(B))</code></span></span></label><label class="option"><input type="checkbox" name="q11" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text">No element of <code>r</code> is in <code>B</code></span></span></label><label class="option"><input type="checkbox" name="q11" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>len(r)</code> is at most <code>len(A)</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A, C and D</p><div class="solution-text"><p><code>r</code> keeps the elements of <code>A</code> that are not in <code>B</code>, in order and with repeats. Its set is the set difference, and nothing in it is in <code>B</code>. Because repeats are kept, <code>A = [1, 1]</code> and <code>B = []</code> give <code>r = [1, 1]</code>, longer than the set difference.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-12" data-question="12" data-type="nat" data-marks="3" data-answer="89">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 12</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>What number is printed by the following code?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">d = {<span class="tok-number">0</span>: <span class="tok-number">1</span>}</span>
+<span class="line"><span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-number">1</span>, <span class="tok-number">6</span>):</span>
+<span class="line">    d[i] = d[i - <span class="tok-number">1</span>] * <span class="tok-number">2</span> + i</span>
+<span class="line"><span class="tok-builtin">print</span>(d[<span class="tok-number">5</span>])</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 12"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 89</p><div class="solution-text"><p>Each value is twice the previous one plus <code>i</code>: 3, 8, 19, 42 and 89.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">89</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-13" data-question="13" data-type="nat" data-marks="3" data-answer="3">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 13</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>What number is printed by the following code?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">words = [<span class="tok-string">&#39;tea&#39;</span>, <span class="tok-string">&#39;eat&#39;</span>, <span class="tok-string">&#39;ate&#39;</span>, <span class="tok-string">&#39;tan&#39;</span>, <span class="tok-string">&#39;nat&#39;</span>, <span class="tok-string">&#39;bat&#39;</span>]</span>
+<span class="line">groups = <span class="tok-builtin">set</span>()</span>
+<span class="line"><span class="tok-keyword">for</span> w <span class="tok-keyword">in</span> words:</span>
+<span class="line">    groups.<span class="tok-func">add</span>(<span class="tok-builtin">tuple</span>(<span class="tok-builtin">sorted</span>(w)))</span>
+<span class="line"><span class="tok-builtin">print</span>(<span class="tok-builtin">len</span>(groups))</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 13"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 3</p><div class="solution-text"><p>Sorting the letters of a word gives the same tuple for every rearrangement of it: tea, eat and ate give (a, e, t), tan and nat give (a, n, t), and bat gives (a, b, t).</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">3</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-14" data-question="14" data-type="mcq" data-marks="1.5" data-answer="C">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 14</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>Questions 14 and 15 are based on the following code. It stores a 3 x 3 matrix as a dictionary of its non-zero entries. What is printed?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">M = {(<span class="tok-number">0</span>, <span class="tok-number">0</span>): <span class="tok-number">4</span>, (<span class="tok-number">1</span>, <span class="tok-number">2</span>): <span class="tok-number">5</span>, (<span class="tok-number">2</span>, <span class="tok-number">1</span>): <span class="tok-number">7</span>}</span>
+<span class="line">n = <span class="tok-number">3</span></span>
+<span class="line">total = <span class="tok-number">0</span></span>
+<span class="line"><span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(n):</span>
+<span class="line">    <span class="tok-keyword">for</span> j <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(n):</span>
+<span class="line">        total += M.<span class="tok-func">get</span>((i, j), <span class="tok-number">0</span>) * (i + <span class="tok-number">1</span>)</span>
+<span class="line"><span class="tok-builtin">print</span>(total, <span class="tok-builtin">len</span>(M))</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 14"><label class="option"><input type="radio" name="q14" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>16 3</code></span></span></label><label class="option"><input type="radio" name="q14" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>16 9</code></span></span></label><label class="option"><input type="radio" name="q14" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>35 3</code></span></span></label><label class="option"><input type="radio" name="q14" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>35 9</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> C — <code>35 3</code></p><div class="solution-text"><p>Only the three stored positions are non-zero; <code>get</code> gives 0 for every other <code>(i, j)</code>. They are weighted by row: 4 x 1 + 5 x 2 + 7 x 3. The dictionary has 3 keys.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">35 3</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-15" data-question="15" data-type="nat" data-marks="1.5" data-answer="33">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 15</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>For the same code, what is the first number printed if <code>(i + 1)</code> is replaced with <code>(j + 1)</code>?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">M = {(<span class="tok-number">0</span>, <span class="tok-number">0</span>): <span class="tok-number">4</span>, (<span class="tok-number">1</span>, <span class="tok-number">2</span>): <span class="tok-number">5</span>, (<span class="tok-number">2</span>, <span class="tok-number">1</span>): <span class="tok-number">7</span>}</span>
+<span class="line">n = <span class="tok-number">3</span></span>
+<span class="line">total = <span class="tok-number">0</span></span>
+<span class="line"><span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(n):</span>
+<span class="line">    <span class="tok-keyword">for</span> j <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(n):</span>
+<span class="line">        total += M.<span class="tok-func">get</span>((i, j), <span class="tok-number">0</span>) * (i + <span class="tok-number">1</span>)</span>
+<span class="line"><span class="tok-builtin">print</span>(total, <span class="tok-builtin">len</span>(M))</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 15"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 33</p><div class="solution-text"><p>Now each entry is weighted by its column: 4 x 1 + 5 x 3 + 7 x 2.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-16" data-question="16" data-type="mcq" data-marks="1.5" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 16</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>Questions 16 and 17 are based on the following code. What is printed?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">votes = [<span class="tok-string">&#39;A&#39;</span>, <span class="tok-string">&#39;B&#39;</span>, <span class="tok-string">&#39;A&#39;</span>, <span class="tok-string">&#39;C&#39;</span>, <span class="tok-string">&#39;B&#39;</span>, <span class="tok-string">&#39;A&#39;</span>, <span class="tok-string">&#39;C&#39;</span>, <span class="tok-string">&#39;C&#39;</span>, <span class="tok-string">&#39;C&#39;</span>]</span>
+<span class="line">tally = {}</span>
+<span class="line"><span class="tok-keyword">for</span> v <span class="tok-keyword">in</span> votes:</span>
+<span class="line">    tally[v] = tally.<span class="tok-func">get</span>(v, <span class="tok-number">0</span>) + <span class="tok-number">1</span></span>
+<span class="line">ranking = []</span>
+<span class="line"><span class="tok-keyword">for</span> name <span class="tok-keyword">in</span> tally:</span>
+<span class="line">    ranking.<span class="tok-func">append</span>((tally[name], name))</span>
+<span class="line">ranking.<span class="tok-func">sort</span>()</span>
+<span class="line"><span class="tok-builtin">print</span>(ranking[-<span class="tok-number">1</span>])</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 16"><label class="option"><input type="radio" name="q16" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>('C', 4)</code></span></span></label><label class="option"><input type="radio" name="q16" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>(4, 'C')</code></span></span></label><label class="option"><input type="radio" name="q16" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>(3, 'A')</code></span></span></label><label class="option"><input type="radio" name="q16" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>(2, 'B')</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — <code>(4, 'C')</code></p><div class="solution-text"><p>The tally is A: 3, B: 2, C: 4. Each tuple has the count first, so sorting puts the largest count last.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">(4, &#39;C&#39;)</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-17" data-question="17" data-type="nat" data-marks="1.5" data-answer="4">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 17</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1.5 marks · no negative marks</span></header>
+    <div class="question-content"><p>For the same code, how many tuples does <code>ranking</code> hold if the first line is <code>votes = list('mississippi')</code>?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">votes = [<span class="tok-string">&#39;A&#39;</span>, <span class="tok-string">&#39;B&#39;</span>, <span class="tok-string">&#39;A&#39;</span>, <span class="tok-string">&#39;C&#39;</span>, <span class="tok-string">&#39;B&#39;</span>, <span class="tok-string">&#39;A&#39;</span>, <span class="tok-string">&#39;C&#39;</span>, <span class="tok-string">&#39;C&#39;</span>, <span class="tok-string">&#39;C&#39;</span>]</span>
+<span class="line">tally = {}</span>
+<span class="line"><span class="tok-keyword">for</span> v <span class="tok-keyword">in</span> votes:</span>
+<span class="line">    tally[v] = tally.<span class="tok-func">get</span>(v, <span class="tok-number">0</span>) + <span class="tok-number">1</span></span>
+<span class="line">ranking = []</span>
+<span class="line"><span class="tok-keyword">for</span> name <span class="tok-keyword">in</span> tally:</span>
+<span class="line">    ranking.<span class="tok-func">append</span>((tally[name], name))</span>
+<span class="line">ranking.<span class="tok-func">sort</span>()</span>
+<span class="line"><span class="tok-builtin">print</span>(ranking[-<span class="tok-number">1</span>])</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 17"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 4</p><div class="solution-text"><p>There is one tuple per different letter: m, i, s and p.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-18" data-question="18" data-type="msq" data-marks="2" data-answer="AC">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 18</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">2 marks · no negative marks</span></header>
+    <div class="question-content"><p>Consider the code below. Select all statements that raise an error when run after it.</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">s = {<span class="tok-number">1</span>, <span class="tok-number">2</span>}</span>
+<span class="line">t = (<span class="tok-number">1</span>, <span class="tok-number">2</span>)</span>
+<span class="line">d = {<span class="tok-number">1</span>: <span class="tok-string">&#39;a&#39;</span>}</span></code></pre></div></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 18"><label class="option"><input type="checkbox" name="q18" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>s.remove(3)</code></span></span></label><label class="option"><input type="checkbox" name="q18" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>s.discard(3)</code></span></span></label><label class="option"><input type="checkbox" name="q18" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>t.append(3)</code></span></span></label><label class="option"><input type="checkbox" name="q18" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>d.pop(1)</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A and C</p><div class="solution-text"><p><code>remove</code> raises <code>KeyError</code> when the value is not in the set, but <code>discard</code> does not. A tuple has no <code>append</code> method: <code>AttributeError</code>. <code>d.pop(1)</code> removes key 1 and returns <code>'a'</code>.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-19" data-question="19" data-type="mcq" data-marks="1" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 19</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>Given the following code snippet, what will be the output?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">a, b = (<span class="tok-number">1</span>, <span class="tok-number">2</span>), [<span class="tok-number">3</span>, <span class="tok-number">4</span>]</span>
+<span class="line">a, b = b, a</span>
+<span class="line"><span class="tok-builtin">print</span>(a, b)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 19"><label class="option"><input type="radio" name="q19" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>(1, 2) [3, 4]</code></span></span></label><label class="option"><input type="radio" name="q19" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>[3, 4] (1, 2)</code></span></span></label><label class="option"><input type="radio" name="q19" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>[3, 4] [1, 2]</code></span></span></label><label class="option"><input type="radio" name="q19" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>(3, 4) [1, 2]</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — <code>[3, 4] (1, 2)</code></p><div class="solution-text"><p>The right side is packed into a tuple of the two objects before anything is assigned, so the names swap. Each object keeps its own type.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">[3, 4] (1, 2)</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-20" data-question="20" data-type="mcq" data-marks="1" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 20</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>What happens when the following code is run?</p><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">d = {<span class="tok-string">&#39;a&#39;</span>: <span class="tok-number">1</span>, <span class="tok-string">&#39;b&#39;</span>: <span class="tok-number">2</span>}</span>
+<span class="line"><span class="tok-keyword">for</span> k <span class="tok-keyword">in</span> d:</span>
+<span class="line">    <span class="tok-keyword">if</span> d[k] == <span class="tok-number">1</span>:</span>
+<span class="line">        d[<span class="tok-string">&#39;c&#39;</span>] = <span class="tok-number">3</span></span>
+<span class="line"><span class="tok-builtin">print</span>(d)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 20"><label class="option"><input type="radio" name="q20" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text">It prints <code>{'a': 1, 'b': 2}</code></span></span></label><label class="option"><input type="radio" name="q20" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text">It raises a <code>RuntimeError</code></span></span></label><label class="option"><input type="radio" name="q20" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text">It raises a <code>KeyError</code></span></span></label><label class="option"><input type="radio" name="q20" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text">It prints <code>{'a': 1, 'b': 2, 'c': 3}</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — It raises a <code>RuntimeError</code></p><div class="solution-text"><p>A dictionary must not gain or lose keys while a <code>for</code> loop is going over it. Adding <code>c</code> during the loop raises <code>RuntimeError: dictionary changed size during iteration</code>.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">RuntimeError: dictionary changed size during iteration</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-21" data-question="21" data-type="nat" data-marks="1" data-answer="33">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 21</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>What number is printed by the following code?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line">t = (<span class="tok-number">4</span>, <span class="tok-number">1</span>, <span class="tok-number">4</span>, <span class="tok-number">2</span>, <span class="tok-number">4</span>)</span>
+<span class="line"><span class="tok-builtin">print</span>(t.<span class="tok-func">count</span>(<span class="tok-number">4</span>) * <span class="tok-number">10</span> + t.<span class="tok-func">index</span>(<span class="tok-number">2</span>))</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 21"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 33</p><div class="solution-text"><p>4 occurs three times, and the first 2 is at index 3.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">33</span></code></pre></div></div></details>
+  </article>
+<article class="question-card" id="question-22" data-question="22" data-type="msq" data-marks="3" data-answer="AB">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 22</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>A list <code>nums</code> holds integers from 1 to 10, and <code>P</code> maps each number from 1 to 10 to how many times it occurs in <code>nums</code>. A number is picked at random from <code>nums</code>, every element equally likely. Select all expressions that give the probability of picking a 5.</p></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 22"><label class="option"><input type="checkbox" name="q22" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text"><code>P[5] / len(nums)</code></span></span></label><label class="option"><input type="checkbox" name="q22" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text"><code>nums.count(5) / len(nums)</code></span></span></label><label class="option"><input type="checkbox" name="q22" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text"><code>P[5] / 10</code></span></span></label><label class="option"><input type="checkbox" name="q22" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text"><code>nums[5] / len(nums)</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A and B</p><div class="solution-text"><p>The probability is the number of 5s over the number of elements. <code>P[5]</code> and <code>nums.count(5)</code> are both the number of 5s. Dividing by 10 uses the number of keys instead of the number of elements, and <code>nums[5]</code> is just the element at index 5.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-23" data-question="23" data-type="mcq" data-marks="1" data-answer="D">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 23</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>Questions 23 and 24 are based on the following function. <code>L</code> is a list of 11 integers, each from 1 to 10. What does <code>h(L)</code> return?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">h</span>(L):</span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-builtin">len</span>(<span class="tok-builtin">set</span>(L)) == <span class="tok-builtin">len</span>(L)</span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 23"><label class="option"><input type="radio" name="q23" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text">It is always <code>True</code></span></span></label><label class="option"><input type="radio" name="q23" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text">It raises an error</span></span></label><label class="option"><input type="radio" name="q23" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text">It cannot be determined without more information about <code>L</code></span></span></label><label class="option"><input type="radio" name="q23" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text">It is always <code>False</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> D — It is always <code>False</code></p><div class="solution-text"><p><code>h</code> is <code>True</code> only when all the elements are different. There are only 10 possible values for 11 elements, so at least two must be equal, and <code>h</code> is always <code>False</code>.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-24" data-question="24" data-type="nat" data-marks="1" data-answer="6">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 24</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>For the same function, how many lists <code>L</code> of length 2, with each element 1, 2 or 3, make <code>h(L)</code> return <code>True</code>?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">h</span>(L):</span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-builtin">len</span>(<span class="tok-builtin">set</span>(L)) == <span class="tok-builtin">len</span>(L)</span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 24"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 6</p><div class="solution-text"><p>There are 3 x 3 = 9 such lists; the 3 with equal elements give <code>False</code>.</p></div></div></details>
+  </article>
+</main>
+<aside class="sidebar" aria-label="Question navigation"><h2>Questions</h2><div class="palette"></div><div class="legend"><span>Not visited</span><span class="l-visited">Visited, unanswered</span><span class="l-answered">Answered</span><span class="l-review">Marked for review</span></div><div class="mini-summary"><span>Attempted</span><b data-count="attempted">0</b><span>Unanswered</span><b data-count="unanswered">24</b><span>For review</span><b data-count="review">0</b></div><a class="btn btn-primary" href="#submission">Review and submit</a></aside>
+</div>
+<section class="wrapup" id="submission"><div class="wrapup-inner">
+<h2>Before you submit</h2>
+<p>Work through the checklist. Select any open item to jump to the first question that still needs attention.</p>
+<ul class="checklist">
+<li><button type="button" data-check="visited"><span class="tick">✓</span><span>Every question has been visited</span><span class="detail"></span></button></li>
+<li><button type="button" data-check="answered"><span class="tick">✓</span><span>Every question has a response</span><span class="detail"></span></button></li>
+<li><button type="button" data-check="review"><span class="tick">✓</span><span>No question is still marked for review</span><span class="detail"></span></button></li>
+</ul>
+<div class="summary-cards"><div><b data-count="attempted">0</b><span>Attempted</span></div><div><b data-count="unanswered">24</b><span>Unanswered</span></div><div><b data-count="review">0</b><span>For review</span></div></div>
+<div class="wrapup-actions"><button class="btn btn-primary" id="submit-btn" type="button">Submit and check answers</button><button class="btn" id="reset-btn" type="button">Reset paper</button><button class="btn" id="print-btn" type="button">Print paper</button></div>
+<div class="score" id="score" hidden><strong></strong><p></p></div>
+</div></section>
+<footer class="paper-footer">Created By Tarika Subhash Hedaoo.</footer>
+<script>
+const cards = [...document.querySelectorAll('.question-card')];
+const palette = document.querySelector('.palette');
+const state = new Map(cards.map(c => [c.dataset.question, { visited: false, review: false }]));
+const $ = id => document.getElementById(id);
+let submitted = false;
+
+function response(card) {
+  if (card.dataset.type === 'nat') return card.querySelector('.nat-input').value.trim();
+  return [...card.querySelectorAll('input:checked')].map(i => i.value).join('');
+}
+function isCorrect(card) {
+  const given = response(card), key = card.dataset.answer;
+  if (card.dataset.type === 'nat') return given !== '' && Math.abs(Number(given) - Number(key)) < 1e-9;
+  return given === key;
+}
+function setCount(name, value) {
+  document.querySelectorAll('[data-count="' + name + '"]').forEach(el => { el.textContent = value; });
+}
+function goTo(card) {
+  card.scrollIntoView({ behavior: 'smooth' });
+  state.get(card.dataset.question).visited = true;
+  refresh();
+}
+
+function refresh() {
+  let answered = 0, review = 0, visited = 0;
+  cards.forEach(card => {
+    const n = card.dataset.question, s = state.get(n), a = response(card) !== '';
+    const b = palette.querySelector('[data-target="' + n + '"]');
+    answered += a; review += s.review; visited += s.visited;
+    b.classList.toggle('visited', s.visited);
+    b.classList.toggle('answered', a);
+    b.classList.toggle('review', s.review);
+    b.setAttribute('aria-label', 'Question ' + n + (a ? ', answered' : ', unanswered') + (s.review ? ', marked for review' : ''));
+  });
+  const total = cards.length;
+  setCount('attempted', answered);
+  setCount('unanswered', total - answered);
+  setCount('review', review);
+  const checks = { visited: [visited === total, visited + ' / ' + total], answered: [answered === total, answered + ' / ' + total], review: [review === 0, review + ' flagged'] };
+  for (const [name, [done, detail]] of Object.entries(checks)) {
+    const item = document.querySelector('[data-check="' + name + '"]');
+    item.classList.toggle('done', done);
+    item.querySelector('.detail').textContent = detail;
+  }
+}
+
+cards.forEach(card => {
+  const n = card.dataset.question, s = state.get(n);
+  const b = document.createElement('button');
+  b.type = 'button'; b.textContent = n; b.dataset.target = n;
+  b.addEventListener('click', () => goTo(card));
+  palette.appendChild(b);
+  card.querySelectorAll('.options input, .nat-input').forEach(i => i.addEventListener('input', refresh));
+  const reviewBtn = card.querySelector('.review-btn');
+  reviewBtn.addEventListener('click', () => {
+    s.review = !s.review;
+    reviewBtn.classList.toggle('active', s.review);
+    reviewBtn.setAttribute('aria-pressed', s.review);
+    reviewBtn.textContent = s.review ? 'Marked for review' : 'Mark for review';
+    refresh();
+  });
+  card.querySelector('.clear-btn').addEventListener('click', () => {
+    card.querySelectorAll('.options input').forEach(i => { i.checked = false; });
+    const nat = card.querySelector('.nat-input');
+    if (nat) nat.value = '';
+    refresh();
+  });
+});
+
+const visitObserver = new IntersectionObserver(entries => {
+  let changed = false;
+  entries.forEach(e => { if (e.isIntersecting) { state.get(e.target.dataset.question).visited = true; changed = true; } });
+  if (changed) refresh();
+}, { threshold: .25 });
+cards.forEach(c => visitObserver.observe(c));
+
+// Each checklist row jumps to the first question that still fails that check.
+const failing = {
+  visited: c => !state.get(c.dataset.question).visited,
+  answered: c => response(c) === '',
+  review: c => state.get(c.dataset.question).review
+};
+document.querySelectorAll('[data-check]').forEach(item => item.addEventListener('click', () => {
+  const card = cards.find(failing[item.dataset.check]);
+  if (card) goTo(card);
+}));
+
+function lock(locked) {
+  cards.forEach(card => card.querySelectorAll('.options input, .nat-input, .clear-btn').forEach(el => { el.disabled = locked; }));
+  $('submit-btn').disabled = locked;
+}
+$('submit-btn').addEventListener('click', () => {
+  const blank = cards.filter(c => response(c) === '').length;
+  if (blank && !confirm(blank + ' question' + (blank === 1 ? ' is' : 's are') + ' unanswered. Submit anyway?')) return;
+  submitted = true;
+  let score = 0, max = 0, right = 0, wrong = 0;
+  cards.forEach(card => {
+    const marks = Number(card.dataset.marks), given = response(card), ok = isCorrect(card);
+    const verdict = given === '' ? 'skipped' : ok ? 'correct' : 'incorrect';
+    max += marks;
+    if (ok) { score += marks; right++; } else if (given !== '') wrong++;
+    const tag = card.querySelector('.result-tag');
+    tag.hidden = false;
+    tag.className = 'result-tag ' + verdict;
+    tag.textContent = verdict === 'correct' ? 'Correct · +' + marks : verdict === 'incorrect' ? 'Incorrect · 0' : 'Not attempted';
+    palette.querySelector('[data-target="' + card.dataset.question + '"]').classList.add(verdict);
+    card.querySelectorAll('.option').forEach(opt => {
+      const input = opt.querySelector('input'), isKey = card.dataset.answer.includes(input.value);
+      opt.classList.toggle('is-correct', isKey);
+      opt.classList.toggle('is-wrong', input.checked && !isKey);
+    });
+    const nat = card.querySelector('.nat-input');
+    if (nat && given !== '') nat.classList.add(ok ? 'is-correct' : 'is-wrong');
+  });
+  lock(true);
+  const box = $('score');
+  box.hidden = false;
+  box.querySelector('strong').textContent = score + ' / ' + max + ' marks';
+  box.querySelector('p').textContent = right + ' correct, ' + wrong + ' incorrect, ' + (cards.length - right - wrong) + ' not attempted. MSQs earn marks only when exactly the correct set is selected. Open each solution to review your working.';
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+$('reset-btn').addEventListener('click', () => {
+  if (!confirm('Clear every response and start the paper again?')) return;
+  submitted = false;
+  cards.forEach(card => {
+    const s = state.get(card.dataset.question);
+    s.visited = false; s.review = false;
+    card.querySelectorAll('.options input').forEach(i => { i.checked = false; });
+    card.querySelectorAll('.option').forEach(o => o.classList.remove('is-correct', 'is-wrong'));
+    const nat = card.querySelector('.nat-input');
+    if (nat) { nat.value = ''; nat.classList.remove('is-correct', 'is-wrong'); }
+    const reviewBtn = card.querySelector('.review-btn');
+    reviewBtn.classList.remove('active'); reviewBtn.setAttribute('aria-pressed', 'false'); reviewBtn.textContent = 'Mark for review';
+    card.querySelector('.result-tag').hidden = true;
+    card.querySelector('.solution').open = false;
+    palette.querySelector('[data-target="' + card.dataset.question + '"]').classList.remove('correct', 'incorrect', 'skipped');
+  });
+  lock(false);
+  $('score').hidden = true;
+  refresh();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+$('print-btn').addEventListener('click', () => window.print());
+
+document.querySelectorAll('.copy-code').forEach(btn => btn.addEventListener('click', async event => {
+  event.preventDefault(); // a code block inside an option must not toggle that option
+  const text = btn.closest('.code-wrap').querySelector('code').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  btn.textContent = 'Copied'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1200);
+}));
+refresh();
+</script>
+</body>
+</html>
