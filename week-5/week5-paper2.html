@@ -180,7 +180,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 </style>
 </head>
 <body>
-<header class="hero"><div class="hero-inner"><div class="eyebrow">Python · Week 5 · Functions, scope, and recursion</div><h1>Week 5 Revision Paper 2</h1><p>Functions calling functions, Euclid's gcd, reversing a string by recursion, a nested function, composed calls, list arguments, a missing return, a recursive count, and recursion over a list.</p><div class="paper-meta"><span>21 questions</span><span>50 marks</span><span>90 minutes</span><span>12 MCQ · 4 MSQ · 5 NAT</span><span>No negative marking</span></div></div></header>
+<header class="hero"><div class="hero-inner"><div class="eyebrow">Python · Week 5 · Functions, scope, and recursion</div><h1>Week 5 Revision Paper 2</h1><p>Functions calling functions, Euclid's gcd, reversing a string by recursion, a nested function, composed calls, list arguments, a missing return, a recursive count, and recursion over a list, plus Assignment 5 style questions on buggy checks and what a function means.</p><div class="paper-meta"><span>24 questions</span><span>55 marks</span><span>90 minutes</span><span>13 MCQ · 5 MSQ · 6 NAT</span><span>No negative marking</span></div></div></header>
 <div class="layout">
 <main>
 <section class="instructions"><h2>Instructions</h2><ul><li>MCQ has exactly one correct option; MSQ has one or more correct options.</li><li>Enter only the requested number for NAT questions. Unless stated otherwise, assume standard Python 3 behaviour.</li><li>Solutions are collapsed. Attempt each question before opening its solution, then submit at the end to see your score.</li></ul></section>
@@ -515,8 +515,67 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
     <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 12</p><div class="solution-text"><p>Each of the 6 calls with <code>n</code> from 6 down to 1 adds 2.</p></div><div class="code-wrap is-output"><div class="code-bar"><span class="code-label">Output</span><button class="copy-code" type="button" aria-label="Copy Output to clipboard">Copy</button></div><pre><code><span class="line">12</span></code></pre></div></div></details>
   </article>
+<article class="question-card" id="question-22" data-question="22" data-type="msq" data-marks="3" data-answer="AD">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 22</span><span class="badge badge-msq" title="Choose one or more options">MSQ</span><span class="result-tag" hidden></span></div><span class="marks">3 marks · no negative marks</span></header>
+    <div class="question-content"><p>Select all correct implementations of a function <code>three(L)</code> that returns <code>True</code> if the list <code>L</code> has the same value three times in a row, and <code>False</code> otherwise. For example, <code>three([1, 2, 2, 2])</code> is <code>True</code> and <code>three([4, 4, 1, 4, 4])</code> is <code>False</code>.</p></div>
+    <p class="type-hint">Choose one or more options</p>
+    <div class="options" role="group" aria-label="Options for question 22"><label class="option"><input type="checkbox" name="q22" value="A"><span class="option-letter">A</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option A</span><button class="copy-code" type="button" aria-label="Copy Option A to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">three</span>(L):</span>
+<span class="line">    count = <span class="tok-number">1</span></span>
+<span class="line">    <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-number">1</span>, <span class="tok-builtin">len</span>(L)):</span>
+<span class="line">        <span class="tok-keyword">if</span> L[i] == L[i - <span class="tok-number">1</span>]:</span>
+<span class="line">            count += <span class="tok-number">1</span></span>
+<span class="line">            <span class="tok-keyword">if</span> count == <span class="tok-number">3</span>:</span>
+<span class="line">                <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">        <span class="tok-keyword">else</span>:</span>
+<span class="line">            count = <span class="tok-number">1</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q22" value="B"><span class="option-letter">B</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option B</span><button class="copy-code" type="button" aria-label="Copy Option B to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">three</span>(L):</span>
+<span class="line">    count = <span class="tok-number">1</span></span>
+<span class="line">    <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-number">1</span>, <span class="tok-builtin">len</span>(L)):</span>
+<span class="line">        <span class="tok-keyword">if</span> L[i] == L[i - <span class="tok-number">1</span>]:</span>
+<span class="line">            count += <span class="tok-number">1</span></span>
+<span class="line">            <span class="tok-keyword">if</span> count == <span class="tok-number">3</span>:</span>
+<span class="line">                <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q22" value="C"><span class="option-letter">C</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option C</span><button class="copy-code" type="button" aria-label="Copy Option C to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">three</span>(L):</span>
+<span class="line">    count = <span class="tok-number">1</span></span>
+<span class="line">    <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-number">1</span>, <span class="tok-builtin">len</span>(L)):</span>
+<span class="line">        <span class="tok-keyword">if</span> L[i] == L[i - <span class="tok-number">1</span>]:</span>
+<span class="line">            count += <span class="tok-number">1</span></span>
+<span class="line">            <span class="tok-keyword">if</span> count == <span class="tok-number">3</span>:</span>
+<span class="line">                <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">        <span class="tok-keyword">else</span>:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">False</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label><label class="option"><input type="checkbox" name="q22" value="D"><span class="option-letter">D</span><span class="option-body"><div class="code-wrap is-python numbered"><div class="code-bar"><span class="code-label">Option D</span><button class="copy-code" type="button" aria-label="Copy Option D to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">three</span>(L):</span>
+<span class="line">    <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> <span class="tok-builtin">range</span>(<span class="tok-builtin">len</span>(L) - <span class="tok-number">2</span>):</span>
+<span class="line">        <span class="tok-keyword">if</span> L[i] == L[i + <span class="tok-number">1</span>] == L[i + <span class="tok-number">2</span>]:</span>
+<span class="line">            <span class="tok-keyword">return</span> <span class="tok-const">True</span></span>
+<span class="line">    <span class="tok-keyword">return</span> <span class="tok-const">False</span></span></code></pre></div></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> A and D</p><div class="solution-text"><p>The run length must go back to 1 whenever a value differs from the one before it. Without that reset, the two pairs in <code>[4, 4, 1, 4, 4]</code> add up to 3. Returning <code>False</code> at the first difference gives up too early, so <code>[1, 2, 2, 2]</code> fails. The last version looks at every window of three neighbours directly.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-23" data-question="23" data-type="mcq" data-marks="1" data-answer="B">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 23</span><span class="badge badge-mcq" title="Choose one option">MCQ</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>Questions 23 and 24 are based on the following function. <code>n</code> is a positive even integer. What does <code>f(n)</code> return?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">f</span>(n):</span>
+<span class="line">    <span class="tok-keyword">while</span> n % <span class="tok-number">2</span> == <span class="tok-number">0</span> <span class="tok-keyword">and</span> n &gt; <span class="tok-number">0</span>:</span>
+<span class="line">        n = n // <span class="tok-number">2</span></span>
+<span class="line">    <span class="tok-keyword">return</span> n == <span class="tok-number">1</span></span></code></pre></div></div>
+    <p class="type-hint">Choose one option</p>
+    <div class="options" role="radiogroup" aria-label="Options for question 23"><label class="option"><input type="radio" name="q23" value="A"><span class="option-letter">A</span><span class="option-body"><span class="option-text">It raises an error</span></span></label><label class="option"><input type="radio" name="q23" value="B"><span class="option-letter">B</span><span class="option-body"><span class="option-text">It cannot be determined without more information about <code>n</code></span></span></label><label class="option"><input type="radio" name="q23" value="C"><span class="option-letter">C</span><span class="option-body"><span class="option-text">It is always <code>False</code></span></span></label><label class="option"><input type="radio" name="q23" value="D"><span class="option-letter">D</span><span class="option-body"><span class="option-text">It is always <code>True</code></span></span></label></div>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> B — It cannot be determined without more information about <code>n</code></p><div class="solution-text"><p>The loop divides out every factor of 2, and the result is 1 only if nothing else was left, so <code>f(n)</code> is <code>True</code> exactly when <code>n</code> is a power of 2. Being even is not enough: <code>f(8)</code> is <code>True</code>, but <code>f(6)</code> ends at 3 and is <code>False</code>.</p></div></div></details>
+  </article>
+<article class="question-card" id="question-24" data-question="24" data-type="nat" data-marks="1" data-answer="7">
+    <header class="question-head"><div class="question-title"><span class="question-number">Question 24</span><span class="badge badge-nat" title="Enter a number">NAT</span><span class="result-tag" hidden></span></div><span class="marks">1 mark · no negative marks</span></header>
+    <div class="question-content"><p>For the same function, how many integers <code>n</code> from 1 to 100 make <code>f(n)</code> return <code>True</code>?</p><div class="code-wrap is-python"><div class="code-bar"><span class="code-label">Python</span><button class="copy-code" type="button" aria-label="Copy Python to clipboard">Copy</button></div><pre><code class="language-python"><span class="line"><span class="tok-keyword">def</span> <span class="tok-func">f</span>(n):</span>
+<span class="line">    <span class="tok-keyword">while</span> n % <span class="tok-number">2</span> == <span class="tok-number">0</span> <span class="tok-keyword">and</span> n &gt; <span class="tok-number">0</span>:</span>
+<span class="line">        n = n // <span class="tok-number">2</span></span>
+<span class="line">    <span class="tok-keyword">return</span> n == <span class="tok-number">1</span></span></code></pre></div></div>
+    <p class="type-hint">Enter a number</p>
+    <label class="nat-label"><span>Numerical answer</span><input class="nat-input" type="number" inputmode="decimal" step="any" placeholder="e.g. 12, -3 or 2.5" aria-label="Numerical answer for question 24"></label>
+    <div class="question-actions"><button class="review-btn" type="button" aria-pressed="false">Mark for review</button><button class="clear-btn" type="button">Clear response</button></div>
+    <details class="solution"><summary>View answer and solution</summary><div class="solution-inner"><p class="answer-line"><strong>Correct answer:</strong> 7</p><div class="solution-text"><p>The powers of 2 up to 100 are 1, 2, 4, 8, 16, 32 and 64. For 1 the loop does not run, and 1 == 1.</p></div></div></details>
+  </article>
 </main>
-<aside class="sidebar" aria-label="Question navigation"><h2>Questions</h2><div class="palette"></div><div class="legend"><span>Not visited</span><span class="l-visited">Visited, unanswered</span><span class="l-answered">Answered</span><span class="l-review">Marked for review</span></div><div class="mini-summary"><span>Attempted</span><b data-count="attempted">0</b><span>Unanswered</span><b data-count="unanswered">21</b><span>For review</span><b data-count="review">0</b></div><a class="btn btn-primary" href="#submission">Review and submit</a></aside>
+<aside class="sidebar" aria-label="Question navigation"><h2>Questions</h2><div class="palette"></div><div class="legend"><span>Not visited</span><span class="l-visited">Visited, unanswered</span><span class="l-answered">Answered</span><span class="l-review">Marked for review</span></div><div class="mini-summary"><span>Attempted</span><b data-count="attempted">0</b><span>Unanswered</span><b data-count="unanswered">24</b><span>For review</span><b data-count="review">0</b></div><a class="btn btn-primary" href="#submission">Review and submit</a></aside>
 </div>
 <section class="wrapup" id="submission"><div class="wrapup-inner">
 <h2>Before you submit</h2>
@@ -526,7 +585,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 <li><button type="button" data-check="answered"><span class="tick">✓</span><span>Every question has a response</span><span class="detail"></span></button></li>
 <li><button type="button" data-check="review"><span class="tick">✓</span><span>No question is still marked for review</span><span class="detail"></span></button></li>
 </ul>
-<div class="summary-cards"><div><b data-count="attempted">0</b><span>Attempted</span></div><div><b data-count="unanswered">21</b><span>Unanswered</span></div><div><b data-count="review">0</b><span>For review</span></div></div>
+<div class="summary-cards"><div><b data-count="attempted">0</b><span>Attempted</span></div><div><b data-count="unanswered">24</b><span>Unanswered</span></div><div><b data-count="review">0</b><span>For review</span></div></div>
 <div class="wrapup-actions"><button class="btn btn-primary" id="submit-btn" type="button">Submit and check answers</button><button class="btn" id="reset-btn" type="button">Reset paper</button><button class="btn" id="print-btn" type="button">Print paper</button></div>
 <div class="score" id="score" hidden><strong></strong><p></p></div>
 </div></section>
