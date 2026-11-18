@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2025_May_oppe1_set1 · OPPE-1</title>
+  <meta name="description" content="2025 May · Set 1 of OPPE-1: 7 problems, each explained slide by slide.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=JetBrains+Mono:wght@500;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f8fc;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5d687c;
+      --line: #dce2ee;
+      --blue: #1a73e8;
+      --blue-dark: #1557ad;
+      --blue-soft: #e8f0fe;
+      --green: #1f8f5f;
+      --shadow: 0 18px 60px rgba(23, 32, 51, 0.08);
+      --radius: 8px;
+      --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+        var(--bg);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: inherit; }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .brand:hover .back { color: var(--blue); }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+    }
+
+    .back { color: var(--muted); }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      color: var(--ink);
+      font-family: Fraunces, Georgia, "Times New Roman", serif;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .facts li {
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .credit {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .bar { position: sticky; top: 0; z-index: 5; background: rgba(255, 255, 255, 0.96); border-bottom: 1px solid var(--line); backdrop-filter: blur(6px); }
+
+    .bar-inner { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding-top: 14px; }
+
+    .crumbs { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+    .crumbs .brand { font-size: 0.8rem; }
+
+    .crumbs .mark { width: 30px; height: 30px; }
+
+    .set-nav { display: flex; gap: 14px; font-family: var(--mono); font-size: 0.72rem; font-weight: 800; white-space: nowrap; }
+
+    .set-nav a { color: var(--muted); text-decoration: none; }
+
+    .set-nav a:hover { color: var(--blue); }
+
+    .heading { margin: 12px 0 8px; }
+
+    .heading .eyebrow { margin-bottom: 4px; font-size: 0.74rem; }
+
+    h1 { font-family: var(--mono); font-size: clamp(1.05rem, 2.6vw, 1.45rem); font-weight: 800; overflow-wrap: anywhere; }
+
+    .tabs { position: relative; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      flex: none;
+      padding: 10px 14px 11px;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font: 800 0.84rem/1 var(--mono);
+      text-decoration: none;
+    }
+
+    .tab:hover { color: var(--ink); }
+
+    .tab:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; border-radius: 4px 4px 0 0; }
+
+    .tab[aria-selected="true"] { color: var(--blue); border-bottom-color: var(--blue); }
+
+    main { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 72px; }
+
+    .js .problem[hidden] { display: none; }
+
+    .problem + .problem { margin-top: 64px; }
+
+    .js .problem + .problem { margin-top: 0; }
+
+    .problem-head { max-width: 740px; margin-bottom: 24px; }
+
+    .problem-head .eyebrow { margin-bottom: 8px; }
+
+    .problem-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); font-weight: 800; }
+
+    .count { margin: 10px 0 0; color: var(--muted); font-family: var(--mono); font-size: 0.78rem; font-weight: 800; }
+
+    .slides { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+
+    .slide { min-width: 0; margin: 0; }
+
+    .slide img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    figcaption { margin-top: 8px; color: var(--muted); font-family: var(--mono); font-size: 0.72rem; font-weight: 800; }
+
+    .set-credit { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); }
+
+    .steps { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+
+    .step {
+      max-width: 100%;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .step:hover { border-color: rgba(26, 115, 232, 0.45); color: var(--blue); }
+
+    .step.next { margin-left: auto; text-align: right; }
+
+    @media (max-width: 640px) {
+      .bar-inner, main { width: calc(100% - 24px); }
+      .bar-inner { padding-top: 10px; }
+      .back-label, .set-nav { display: none; }
+      .tab { padding: 10px 10px 11px; }
+      main { padding-top: 24px; }
+      .slides { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-inner">
+      <div class="crumbs">
+        <a class="brand" href="../"><span class="mark">Py</span><span class="back">← <span class="back-label">All </span>OPPE-1 sets</span></a>
+        <nav class="set-nav" aria-label="Other sets"><a href="../2025_jan_oppe1_set3/">← 2025_Jan_oppe1_set3</a><a href="../2025_may_oppe1_set2/">2025_May_oppe1_set2 →</a></nav>
+      </div>
+      <div class="heading">
+        <p class="eyebrow">OPPE-1 · 2025 May · Set 1</p>
+        <h1>2025_May_oppe1_set1</h1>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Problems" id="tabs"><a class="tab" id="tab-s1p1" href="#s1p1" role="tab" aria-controls="panel-s1p1">S1·P1</a><a class="tab" id="tab-s1p2" href="#s1p2" role="tab" aria-controls="panel-s1p2">S1·P2</a><a class="tab" id="tab-s1p3" href="#s1p3" role="tab" aria-controls="panel-s1p3">S1·P3</a><a class="tab" id="tab-s2p1" href="#s2p1" role="tab" aria-controls="panel-s2p1">S2·P1</a><a class="tab" id="tab-s2p2" href="#s2p2" role="tab" aria-controls="panel-s2p2">S2·P2</a><a class="tab" id="tab-s3p1" href="#s3p1" role="tab" aria-controls="panel-s3p1">S3·P1</a><a class="tab" id="tab-s3p2" href="#s3p2" role="tab" aria-controls="panel-s3p2">S3·P2</a></nav>
+    </div>
+  </header>
+  <main id="panels">
+      <section class="problem" id="panel-s1p1" data-id="s1p1" role="tabpanel" aria-labelledby="tab-s1p1">
+        <div class="problem-head">
+          <p class="eyebrow">Section 1 · Problem 1</p>
+          <h2>Describe a number by divisibility (FizzBuzz)</h2>
+          <p class="count">10 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s1p1/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 1 of 10">
+            <figcaption>Slide 1 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 2 of 10">
+            <figcaption>Slide 2 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 3 of 10">
+            <figcaption>Slide 3 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 4 of 10">
+            <figcaption>Slide 4 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 5 of 10">
+            <figcaption>Slide 5 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 6 of 10">
+            <figcaption>Slide 6 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 7 of 10">
+            <figcaption>Slide 7 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 8 of 10">
+            <figcaption>Slide 8 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 9 of 10">
+            <figcaption>Slide 9 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p1/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Describe a number by divisibility (FizzBuzz): slide 10 of 10">
+            <figcaption>Slide 10 of 10</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step next" href="#s1p2">S1·P2 Card to value tuple →</a></nav>
+      </section>
+      <section class="problem" id="panel-s1p2" data-id="s1p2" role="tabpanel" aria-labelledby="tab-s1p2">
+        <div class="problem-head">
+          <p class="eyebrow">Section 1 · Problem 2</p>
+          <h2>Card to value tuple</h2>
+          <p class="count">10 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s1p2/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 1 of 10">
+            <figcaption>Slide 1 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 2 of 10">
+            <figcaption>Slide 2 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 3 of 10">
+            <figcaption>Slide 3 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 4 of 10">
+            <figcaption>Slide 4 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 5 of 10">
+            <figcaption>Slide 5 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 6 of 10">
+            <figcaption>Slide 6 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 7 of 10">
+            <figcaption>Slide 7 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 8 of 10">
+            <figcaption>Slide 8 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 9 of 10">
+            <figcaption>Slide 9 of 10</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p2/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Card to value tuple: slide 10 of 10">
+            <figcaption>Slide 10 of 10</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step" href="#s1p1">← S1·P1 Describe a number by divisibility (FizzBuzz)</a><a class="step next" href="#s1p3">S1·P3 Rotate even indices →</a></nav>
+      </section>
+      <section class="problem" id="panel-s1p3" data-id="s1p3" role="tabpanel" aria-labelledby="tab-s1p3">
+        <div class="problem-head">
+          <p class="eyebrow">Section 1 · Problem 3</p>
+          <h2>Rotate even indices</h2>
+          <p class="count">11 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s1p3/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 1 of 11">
+            <figcaption>Slide 1 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 2 of 11">
+            <figcaption>Slide 2 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 3 of 11">
+            <figcaption>Slide 3 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 4 of 11">
+            <figcaption>Slide 4 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 5 of 11">
+            <figcaption>Slide 5 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 6 of 11">
+            <figcaption>Slide 6 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 7 of 11">
+            <figcaption>Slide 7 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 8 of 11">
+            <figcaption>Slide 8 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 9 of 11">
+            <figcaption>Slide 9 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 10 of 11">
+            <figcaption>Slide 10 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s1p3/11.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Rotate even indices: slide 11 of 11">
+            <figcaption>Slide 11 of 11</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step" href="#s1p2">← S1·P2 Card to value tuple</a><a class="step next" href="#s2p1">S2·P1 Unique pairs that sum to k →</a></nav>
+      </section>
+      <section class="problem" id="panel-s2p1" data-id="s2p1" role="tabpanel" aria-labelledby="tab-s2p1">
+        <div class="problem-head">
+          <p class="eyebrow">Section 2 · Problem 1</p>
+          <h2>Unique pairs that sum to k</h2>
+          <p class="count">11 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s2p1/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 1 of 11">
+            <figcaption>Slide 1 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 2 of 11">
+            <figcaption>Slide 2 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 3 of 11">
+            <figcaption>Slide 3 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 4 of 11">
+            <figcaption>Slide 4 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 5 of 11">
+            <figcaption>Slide 5 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 6 of 11">
+            <figcaption>Slide 6 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 7 of 11">
+            <figcaption>Slide 7 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 8 of 11">
+            <figcaption>Slide 8 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 9 of 11">
+            <figcaption>Slide 9 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 10 of 11">
+            <figcaption>Slide 10 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p1/11.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Unique pairs that sum to k: slide 11 of 11">
+            <figcaption>Slide 11 of 11</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step" href="#s1p3">← S1·P3 Rotate even indices</a><a class="step next" href="#s2p2">S2·P2 Replace consonants with # →</a></nav>
+      </section>
+      <section class="problem" id="panel-s2p2" data-id="s2p2" role="tabpanel" aria-labelledby="tab-s2p2">
+        <div class="problem-head">
+          <p class="eyebrow">Section 2 · Problem 2</p>
+          <h2>Replace consonants with #</h2>
+          <p class="count">11 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s2p2/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 1 of 11">
+            <figcaption>Slide 1 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 2 of 11">
+            <figcaption>Slide 2 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 3 of 11">
+            <figcaption>Slide 3 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 4 of 11">
+            <figcaption>Slide 4 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 5 of 11">
+            <figcaption>Slide 5 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 6 of 11">
+            <figcaption>Slide 6 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 7 of 11">
+            <figcaption>Slide 7 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 8 of 11">
+            <figcaption>Slide 8 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 9 of 11">
+            <figcaption>Slide 9 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 10 of 11">
+            <figcaption>Slide 10 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s2p2/11.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Replace consonants with #: slide 11 of 11">
+            <figcaption>Slide 11 of 11</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step" href="#s2p1">← S2·P1 Unique pairs that sum to k</a><a class="step next" href="#s3p1">S3·P1 Text frequency and diversity analysis →</a></nav>
+      </section>
+      <section class="problem" id="panel-s3p1" data-id="s3p1" role="tabpanel" aria-labelledby="tab-s3p1">
+        <div class="problem-head">
+          <p class="eyebrow">Section 3 · Problem 1</p>
+          <h2>Text frequency and diversity analysis</h2>
+          <p class="count">11 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s3p1/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 1 of 11">
+            <figcaption>Slide 1 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 2 of 11">
+            <figcaption>Slide 2 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 3 of 11">
+            <figcaption>Slide 3 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 4 of 11">
+            <figcaption>Slide 4 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 5 of 11">
+            <figcaption>Slide 5 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 6 of 11">
+            <figcaption>Slide 6 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 7 of 11">
+            <figcaption>Slide 7 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 8 of 11">
+            <figcaption>Slide 8 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 9 of 11">
+            <figcaption>Slide 9 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 10 of 11">
+            <figcaption>Slide 10 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p1/11.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="Text frequency and diversity analysis: slide 11 of 11">
+            <figcaption>Slide 11 of 11</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step" href="#s2p2">← S2·P2 Replace consonants with #</a><a class="step next" href="#s3p2">S3·P2 The arrow trail →</a></nav>
+      </section>
+      <section class="problem" id="panel-s3p2" data-id="s3p2" role="tabpanel" aria-labelledby="tab-s3p2">
+        <div class="problem-head">
+          <p class="eyebrow">Section 3 · Problem 2</p>
+          <h2>The arrow trail</h2>
+          <p class="count">11 slides</p>
+        </div>
+        <div class="slides">
+          <figure class="slide">
+            <img src="s3p2/01.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 1 of 11">
+            <figcaption>Slide 1 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/02.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 2 of 11">
+            <figcaption>Slide 2 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/03.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 3 of 11">
+            <figcaption>Slide 3 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/04.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 4 of 11">
+            <figcaption>Slide 4 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/05.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 5 of 11">
+            <figcaption>Slide 5 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/06.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 6 of 11">
+            <figcaption>Slide 6 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/07.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 7 of 11">
+            <figcaption>Slide 7 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/08.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 8 of 11">
+            <figcaption>Slide 8 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/09.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 9 of 11">
+            <figcaption>Slide 9 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/10.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 10 of 11">
+            <figcaption>Slide 10 of 11</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="s3p2/11.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The arrow trail: slide 11 of 11">
+            <figcaption>Slide 11 of 11</figcaption>
+          </figure>
+        </div>
+        <nav class="steps" aria-label="Other problems"><a class="step" href="#s3p1">← S3·P1 Text frequency and diversity analysis</a></nav>
+      </section>
+    <p class="credit set-credit">Slide decks created by the Programming in Python TAs, IIT Madras BS in Data Science.</p>
+  </main>
+  <script>
+    // One problem shows at a time; the URL hash (#s1p1) picks it, and an unknown hash falls back to the first.
+    // Panels are id'd panel-s1p1, not s1p1, so the browser does not jump to them under the sticky bar.
+    document.documentElement.classList.add('js');
+    const tabs = document.getElementById('tabs');
+    const panels = [...document.querySelectorAll('.problem')];
+
+    function show() {
+      const current = panels.find(p => '#' + p.dataset.id === location.hash) || panels[0];
+      if (location.hash !== '#' + current.dataset.id) history.replaceState(null, '', '#' + current.dataset.id);
+      for (const p of panels) p.hidden = p !== current;
+      for (const tab of tabs.children) {
+        const selected = tab.getAttribute('href') === '#' + current.dataset.id;
+        tab.setAttribute('aria-selected', selected);
+        tab.tabIndex = selected ? 0 : -1;
+        // Scroll only the tab strip; scrollIntoView would also move the page under the sticky bar.
+        if (selected) tabs.scrollLeft = Math.max(0, tab.offsetLeft - (tabs.clientWidth - tab.offsetWidth) / 2);
+      }
+      window.scrollTo(0, 0);
+    }
+
+    tabs.addEventListener('keydown', e => {
+      const list = [...tabs.children];
+      const i = list.indexOf(document.activeElement);
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (i < 0 || !step) return;
+      const next = list[(i + step + list.length) % list.length];
+      next.focus();
+      next.click();
+      e.preventDefault();
+    });
+
+    window.addEventListener('hashchange', show);
+    show();
+
+    // Opened from disk (file://), folder links show a directory listing instead of index.html.
+    if (location.protocol === 'file:') {
+      for (const a of document.querySelectorAll('a[href]')) {
+        const href = a.getAttribute('href');
+        if (/^(?![a-z]+:)[^#?]*\/(#.*)?$/i.test(href)) a.setAttribute('href', href.replace(/\/(#.*)?$/, '/index.html$1'));
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pattern matching · OPPE-1 practice</title>
+  <meta name="description" content="OPPE-1 practice by topic: pattern matching. Printing V, X, N, W and Z shapes, triangles, ASCII trails, bordered grids and bar charts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=JetBrains+Mono:wght@500;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f8fc;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5d687c;
+      --line: #dce2ee;
+      --blue: #1a73e8;
+      --blue-dark: #1557ad;
+      --blue-soft: #e8f0fe;
+      --green: #1f8f5f;
+      --shadow: 0 18px 60px rgba(23, 32, 51, 0.08);
+      --radius: 8px;
+      --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+        var(--bg);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    a { color: inherit; }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .brand:hover .back { color: var(--blue); }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+    }
+
+    .back { color: var(--muted); }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      color: var(--ink);
+      font-family: Fraunces, Georgia, "Times New Roman", serif;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .facts li {
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .credit {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .bar { position: sticky; top: 0; z-index: 5; background: rgba(255, 255, 255, 0.96); border-bottom: 1px solid var(--line); backdrop-filter: blur(6px); }
+
+    .bar-inner { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding-top: 14px; }
+
+    .crumbs .brand { font-size: 0.8rem; }
+
+    .crumbs .mark { width: 30px; height: 30px; }
+
+    .heading { margin: 12px 0 8px; }
+
+    .heading .eyebrow { margin-bottom: 4px; font-size: 0.74rem; }
+
+    h1 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 800; }
+
+    .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab { flex: none; padding: 10px 14px 11px; border-bottom: 3px solid transparent; color: var(--muted); font: 800 0.84rem/1 var(--mono); text-decoration: none; }
+
+    .tab:hover { color: var(--ink); }
+
+    .tab[aria-current="page"] { color: var(--blue); border-bottom-color: var(--blue); }
+
+    main { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 72px; }
+
+    .intro { max-width: 740px; }
+
+    .intro p { margin: 0; color: #39465c; font-size: 1.05rem; }
+
+    .jump { display: flex; flex-wrap: wrap; gap: 6px; margin: 22px 0 0; padding: 0; list-style: none; }
+
+    .jump a {
+      display: inline-grid;
+      place-items: center;
+      min-width: 38px;
+      height: 32px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 800 0.76rem/1 var(--mono);
+      text-decoration: none;
+    }
+
+    .jump a:hover { border-color: var(--blue); color: var(--blue); }
+
+    .group { margin-top: 48px; }
+
+    .group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+
+    .group-head h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
+
+    .group-head p { margin: 0; color: var(--muted); font-family: var(--mono); font-size: 0.76rem; font-weight: 800; text-transform: uppercase; }
+
+    .group > .note { max-width: 740px; margin: -6px 0 18px; color: var(--muted); }
+
+    .q-card {
+      max-width: 860px;
+      margin: 0 0 22px;
+      padding: 24px 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      scroll-margin-top: 190px;
+    }
+
+    .q-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+
+    .q-num { margin: 0; font-family: Fraunces, Georgia, serif; font-size: 1.15rem; font-weight: 600; }
+
+    .badge { padding: 3px 9px; border-radius: 999px; background: var(--blue-soft); color: #174ea6; font: 800 0.68rem/1.4 var(--mono); text-transform: uppercase; white-space: nowrap; }
+
+    .badge.optional { background: #eef0f5; color: var(--muted); }
+
+    .q-card h3 { margin-bottom: 10px; font-size: 1.3rem; font-weight: 800; }
+
+    .q-card > p { margin: 0 0 12px; }
+
+    :not(pre) > code { padding: 0.12em 0.38em; border-radius: 5px; background: #eef0f5; font: 88%/1.5 var(--mono); overflow-wrap: anywhere; }
+
+    .deck-link { display: inline-block; margin: 4px 0 2px; color: var(--blue); font: 800 0.78rem/1.5 var(--mono); text-decoration: none; }
+
+    .deck-link:hover { text-decoration: underline; }
+
+    details.solution { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px; }
+
+    details.solution summary { width: fit-content; color: var(--blue); font-weight: 800; cursor: pointer; }
+
+    .sol-label { margin: 16px 0 6px; color: var(--muted); font: 800 0.72rem/1.4 var(--mono); text-transform: uppercase; }
+
+    .code-wrap { max-width: 100%; margin: 8px 0 0; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: #f4f5fa; }
+
+    .code-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 8px 6px 14px; border-bottom: 1px solid var(--line); background: #eceef5; }
+
+    .code-label { color: var(--muted); font: 600 11px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+
+    .copy-code { padding: 3px 10px; border: 1px solid #c9cdd8; border-radius: 6px; background: var(--paper); color: var(--ink); font: 600 11px/1.5 var(--mono); cursor: pointer; }
+
+    .copy-code:hover { border-color: var(--blue); color: var(--blue); }
+
+    .copy-code.copied { border-color: var(--green); color: var(--green); }
+
+    .code-wrap pre { margin: 0; padding: 14px 16px; overflow-x: auto; tab-size: 4; }
+
+    .code-wrap code { color: var(--ink); font: 13.5px/1.7 var(--mono); white-space: pre; }
+
+    .code-wrap.numbered code { counter-reset: line; }
+
+    .code-wrap.numbered .line::before { counter-increment: line; content: counter(line); display: inline-block; width: 1.6em; margin-right: 1.2em; color: #9aa0ad; text-align: right; user-select: none; }
+
+    .code-wrap.is-output { border-left: 3px solid var(--ink); background: var(--paper); }
+
+    .code-wrap.is-output .code-bar { background: var(--paper); }
+
+    .tok-keyword { color: #8430ce; font-weight: 600; }
+    .tok-string { color: #0b7a3b; }
+    .tok-number, .tok-const { color: #b45309; }
+    .tok-comment { color: #7a8190; font-style: italic; }
+    .tok-builtin, .tok-func { color: #1967d2; }
+
+    .q-index { display: grid; gap: 10px; max-width: 860px; margin: 26px 0 0; padding: 0; list-style: none; }
+
+    .q-index li { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 16px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+
+    .q-index .q-title { color: var(--ink); font-weight: 700; text-decoration: none; }
+
+    .q-index .q-title:hover { color: var(--blue); }
+
+    .q-index .q-title span { margin-right: 10px; color: var(--muted); font: 800 0.76rem/1 var(--mono); }
+
+    .q-index .q-meta { color: var(--muted); font: 800 0.72rem/1.5 var(--mono); }
+
+    .q-index .deck-link { flex-basis: 100%; margin: 0; }
+
+    .pages { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; max-width: 860px; margin-top: 18px; }
+
+    .page { min-width: 0; margin: 0; scroll-margin-top: 190px; }
+
+    .page img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+
+    figcaption { margin-top: 8px; color: var(--muted); font-family: var(--mono); font-size: 0.72rem; font-weight: 800; }
+
+    .topic-credit { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); }
+
+    @media (max-width: 640px) {
+      .bar-inner, main { width: calc(100% - 24px); }
+      .bar-inner { padding-top: 10px; }
+      .tab { padding: 10px 10px 11px; }
+      main { padding-top: 24px; }
+      .q-card { padding: 18px 16px; scroll-margin-top: 170px; }
+      .page { scroll-margin-top: 170px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-inner">
+      <div class="crumbs">
+        <a class="brand" href="../../"><span class="mark">Py</span><span class="back">← OPPE-1</span></a>
+      </div>
+      <div class="heading">
+        <p class="eyebrow">OPPE-1 · Practice by topic</p>
+        <h1>Pattern matching</h1>
+      </div>
+      <nav class="tabs" aria-label="Topics"><a class="tab" href="../dictionary/">Dictionary</a><a class="tab" href="../sets/">Sets</a><a class="tab" href="../tuples/">Tuples</a><a class="tab" href="../pattern/" aria-current="page">Pattern matching</a></nav>
+    </div>
+  </header>
+  <main>
+    <div class="intro">
+      <p>10 pattern-printing and output-formatting questions from the past OPPE-1 sets, each with its input and output format, sample cases and notes on the pattern. Pick a question to jump to it, or open the worked slides from its set.</p>
+      <ol class="q-index">
+        <li><a class="q-title" href="#page-1"><span>Q1</span>Print pattern V</a>
+          <span class="q-meta">September 2024 · Set 1 · page 1</span><a class="deck-link" href="../../2024_sep_oppe1_set1/#s3p2">Worked slides: 2024_Sep_oppe1_set1 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-2"><span>Q2</span>Print pattern X</a>
+          <span class="q-meta">September 2024 · Set 2 · page 2</span><a class="deck-link" href="../../2024_sep_oppe1_set2/#s3p2">Worked slides: 2024_Sep_oppe1_set2 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-3"><span>Q3</span>Print an N-shaped pattern</a>
+          <span class="q-meta">September 2024 · Set 3 · page 3</span><a class="deck-link" href="../../2024_sep_oppe1_set3/#s3p2">Worked slides: 2024_Sep_oppe1_set3 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-5"><span>Q4</span>Print a W-shaped pattern</a>
+          <span class="q-meta">January 2025 · Set 1 · page 5</span><a class="deck-link" href="../../2025_jan_oppe1_set1/#s3p2">Worked slides: 2025_Jan_oppe1_set1 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-6"><span>Q5</span>Print a Z-shaped pattern</a>
+          <span class="q-meta">January 2025 · Set 2 · page 6</span><a class="deck-link" href="../../2025_jan_oppe1_set2/#s3p2">Worked slides: 2025_Jan_oppe1_set2 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-8"><span>Q6</span>Print a centred triangle of zeroes</a>
+          <span class="q-meta">January 2025 · Set 3 · page 8</span><a class="deck-link" href="../../2025_jan_oppe1_set3/#s3p2">Worked slides: 2025_Jan_oppe1_set3 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-9"><span>Q7</span>The arrow trail</a>
+          <span class="q-meta">May 2025 · Set 1 · page 9</span><a class="deck-link" href="../../2025_may_oppe1_set1/#s3p2">Worked slides: 2025_May_oppe1_set1 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-10"><span>Q8</span>Print a tic-tac-toe board with borders</a>
+          <span class="q-meta">May 2025 · Set 2 · page 10</span><a class="deck-link" href="../../2025_may_oppe1_set4/#s3p2">Worked slides: 2025_May_oppe1_set4 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-11"><span>Q9</span>Horizontal bar chart generator</a>
+          <span class="q-meta">May 2025 · Set 3 · page 11</span><a class="deck-link" href="../../2025_may_oppe1_set3/#s3p2">Worked slides: 2025_May_oppe1_set3 · S3·P2 →</a></li>
+        <li><a class="q-title" href="#page-12"><span>Q10</span>Fill the first n underscores</a>
+          <span class="q-meta">May 2025 · Set 4 · page 12</span></li>
+        <li><a class="q-title" href="#page-14"><span>A–C</span>Pattern classification, how the questions evolved, skills tested</a>
+          <span class="q-meta">Appendices · page 14</span></li>
+      </ol>
+    </div>
+    <div class="pages">
+      <figure class="page" id="page-1">
+        <img src="01.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 1 of 16">
+        <figcaption>Page 1 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-2">
+        <img src="02.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 2 of 16">
+        <figcaption>Page 2 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-3">
+        <img src="03.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 3 of 16">
+        <figcaption>Page 3 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-4">
+        <img src="04.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 4 of 16">
+        <figcaption>Page 4 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-5">
+        <img src="05.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 5 of 16">
+        <figcaption>Page 5 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-6">
+        <img src="06.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 6 of 16">
+        <figcaption>Page 6 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-7">
+        <img src="07.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 7 of 16">
+        <figcaption>Page 7 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-8">
+        <img src="08.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 8 of 16">
+        <figcaption>Page 8 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-9">
+        <img src="09.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 9 of 16">
+        <figcaption>Page 9 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-10">
+        <img src="10.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 10 of 16">
+        <figcaption>Page 10 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-11">
+        <img src="11.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 11 of 16">
+        <figcaption>Page 11 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-12">
+        <img src="12.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 12 of 16">
+        <figcaption>Page 12 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-13">
+        <img src="13.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 13 of 16">
+        <figcaption>Page 13 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-14">
+        <img src="14.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 14 of 16">
+        <figcaption>Page 14 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-15">
+        <img src="15.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 15 of 16">
+        <figcaption>Page 15 of 16</figcaption>
+      </figure>
+      <figure class="page" id="page-16">
+        <img src="16.jpg" width="1100" height="1424" loading="lazy" decoding="async" alt="Pattern question bank, page 16 of 16">
+        <figcaption>Page 16 of 16</figcaption>
+      </figure>
+    </div>
+    <p class="credit topic-credit">Topic practice collections (dictionary, sets, tuples and pattern printing) created by Rishabh Barthwal.</p>
+  </main>
+  <script>
+    for (const btn of document.querySelectorAll('.copy-code')) {
+      btn.addEventListener('click', async () => {
+        const text = btn.closest('.code-wrap').querySelector('code').innerText;
+        try { await navigator.clipboard.writeText(text); btn.textContent = 'Copied'; btn.classList.add('copied'); }
+        catch { btn.textContent = 'Select and copy'; }
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+      });
+    }
+
+    // Opened from disk (file://), folder links show a directory listing instead of index.html.
+    if (location.protocol === 'file:') {
+      for (const a of document.querySelectorAll('a[href]')) {
+        const href = a.getAttribute('href');
+        if (/^(?![a-z]+:)[^#?]*\/(#.*)?$/i.test(href)) a.setAttribute('href', href.replace(/\/(#.*)?$/, '/index.html$1'));
+      }
+    }
+  </script>
+</body>
+</html>
